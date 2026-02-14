@@ -111,13 +111,31 @@ Day,RamadanDate,Date,Sehri,Iftar
    - Data source used
    - Any notes for review
 
-## 5. Contact for Suggestions
+## 5. Branch and Deployment Flow
+
+For this project, use this flow:
+
+1. `dev` branch:
+   - Use for coding and testing locally.
+   - Dev (Local): [http://localhost:5500/](http://localhost:5500/)
+   - Note: this URL runs on your machine only and is not a shared deployment link.
+2. `main` branch:
+   - Merge `dev` into `main`.
+   - Test the app through deployment (staging validation).
+   - Main (Staging): [https://fascinating-pavlova-aee901.netlify.app](https://fascinating-pavlova-aee901.netlify.app)
+3. `production` branch:
+   - Merge `main` into `production` only after staging is verified.
+   - `production` is the live/public branch and this is the URL everyone uses.
+   - Production (Live): [https://effortless-cheesecake-02e555.netlify.app](https://effortless-cheesecake-02e555.netlify.app)
+   - No direct commits to `production`; only merge verified changes from `main`.
+
+## 6. Contact for Suggestions
 
 For any suggestions, please contact:
 
 **akramfaiz84@gmail.com**
 
-## 6. How to Use the Web App (All 3 Screens)
+## 7. How to Use the Web App (All 3 Screens)
 
 ### Screen 1: Home / Countdown Screen
 
