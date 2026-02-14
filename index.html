@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ramadan Timetable</title>
+<link rel="icon" type="image/png" sizes="512x512" href="assets/cities/ramadanIcon.png" />
+<link rel="apple-touch-icon" href="assets/cities/ramadanIcon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app" role="application" aria-label="Ramadan Timetable App">
+    <section class="city-switcher" aria-label="City selector">
+        <label for="cityToggle">City</label>
+        <div class="city-dropdown" id="cityDropdown">
+            <button id="cityToggle" class="city-toggle" type="button" aria-haspopup="listbox" aria-expanded="false">
+                <span id="cityToggleText">Select city</span>
+                <span class="city-chevron" aria-hidden="true">▾</span>
+            </button>
+            <div id="cityMenu" class="city-menu" role="listbox" aria-label="Cities"></div>
+            <select id="citySelect" class="visually-hidden" tabindex="-1" aria-hidden="true"></select>
+        </div>
+    </section>
+
+    <header class="top-bar">
+        <button id="daysBtn" class="icon-btn" aria-label="Open full Ramadan timetable">☰</button>
+        <h1 class="app-title">Ramadan Timetable</h1>
+        <button id="duaBtn" class="icon-btn" aria-label="Open duas">🤲</button>
+    </header>
+
+    <main>
+        <section class="main-card">
+            <p id="todayLabel" class="label">Today</p>
+            <p id="currentCity" class="current-city"></p>
+            <h2 id="ramadanDay">Loading...</h2>
+            <h3 id="statusText" class="status-text"></h3>
+            <p id="countdown" aria-live="polite">--:--:--</p>
+        </section>
+
+        <section class="time-card">
+            <div class="time-row">
+                <span>Sehri</span>
+                <strong id="sehriTime">--</strong>
+            </div>
+            <div class="time-row">
+                <span>Iftar</span>
+                <strong id="iftarTime">--</strong>
+            </div>
+        </section>
+
+        <section class="quote-card">
+            <p class="label">Daily Motivation</p>
+            <p id="quote"></p>
+        </section>
+    </main>
+</div>
+
+<div id="duaModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="duaTitle">
+    <div class="modal-content">
+        <h3 id="duaTitle">Suhoor and Iftar Dua</h3>
+
+        <h4>Suhoor Dua</h4>
+        <p class="arabic">وَبِصَوْمِ غَدٍ نَوَيْتُ مِنْ شَهْرِ رَمَضَانَ</p>
+        <p class="translation">I intend to keep the fast for tomorrow in the month of Ramadan.</p>
+
+        <h4>Iftar Dua</h4>
+        <p class="arabic">اللَّهُمَّ إِنِّي لَكَ صُمْتُ وَبِكَ آمَنْتُ وَعَلَيْكَ تَوَكَّلْتُ وَعَلَى رِزْقِكَ أَفْطَرْتُ</p>
+        <p class="translation">O Allah, I fasted for You, believed in You, relied on You, and break my fast with Your provision.</p>
+
+        <button class="close-btn" type="button" data-close-modal>Close</button>
+    </div>
+</div>
+
+<div id="daysModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="daysTitle">
+    <div class="modal-content list-modal">
+        <h3 id="daysTitle">Full Ramadan Timetable</h3>
+        <div id="daysList" class="days-list"></div>
+        <button class="close-btn" type="button" data-close-modal>Close</button>
+    </div>
+</div>
+
+<script src="quotes.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
