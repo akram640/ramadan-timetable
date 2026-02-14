@@ -378,7 +378,8 @@ function getRamadanDayLabel(day) {
 
     if (firstDayDate && today < firstDayDate) {
         const daysToStart = getDateDiffInDays(today, firstDayDate);
-        return `Day -${daysToStart} Ramadan`;
+        const dayWord = daysToStart === 1 ? "Day" : "Days";
+        return `${daysToStart} ${dayWord} Until Ramadan`;
     }
 
     return `Day ${day.Day} Ramadan`;
