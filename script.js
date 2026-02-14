@@ -547,11 +547,14 @@ function tryNextBackground(candidates, index, fallback) {
 
 function openModal(id) {
     const modal = document.getElementById(id);
-    if (modal) modal.style.display = "block";
+    if (!modal) return;
+    modal.style.display = "block";
+    document.body.classList.add("modal-open");
 }
 
 function closeAllModals() {
     document.querySelectorAll(".modal").forEach(modal => {
         modal.style.display = "none";
     });
+    document.body.classList.remove("modal-open");
 }
