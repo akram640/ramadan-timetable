@@ -4,11 +4,15 @@ Replace these placeholder icons with your own downloaded icons from the internet
 
 Keep the same file names so no code changes are required:
 
-- `ramadan-moon.svg` (countdown icon in main card)
+- `main-card-bg.png` (faded background art inside the main countdown card)
 - `sehri-cup.svg` (Sehri row icon)
 - `iftar-meal.svg` (Iftar row icon)
 
-If you prefer PNG/JPG, either:
+How to replace main card background:
 
-1. Rename your files to these same `.svg` names after converting, or
-2. Update paths in `index.html` where these icons are used.
+1. Save your background image as `main-card-bg.png` in this folder.
+2. Keep the other icon names unchanged, or update `index.html` if you rename them.
+
+Note:
+
+- If `main-card-bg.png` is missing, the card automatically falls back to a simple theme-based gradient.

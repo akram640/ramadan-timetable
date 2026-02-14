@@ -5,11 +5,13 @@ let currentDayIndex = -1;
 let countdownInterval = null;
 let selectedCityFile = "";
 const THEME_STORAGE_KEY = "ramadan_theme";
+const MAIN_CARD_ORNAMENT_PATH = "assets/icons/main-card-bg.png";
 let currentTheme = "light";
 
 document.addEventListener("DOMContentLoaded", initApp);
 
 async function initApp() {
+    applyMainCardOrnament(MAIN_CARD_ORNAMENT_PATH);
     wireEvents();
     initTheme();
     updateTodayDateDisplay();
@@ -141,6 +143,29 @@ function writeStorage(key, value) {
     } catch {
         // Ignore storage failures; theme still applies for current session.
     }
+}
+
+function applyMainCardOrnament(imagePath) {
+    const normalizedPath = String(imagePath || "").trim();
+    if (!normalizedPath) {
+        document.body.classList.remove("has-main-card-ornament");
+        document.body.style.setProperty("--main-card-ornament", "none");
+        return;
+    }
+
+    const testImage = new Image();
+
+    testImage.onload = () => {
+        document.body.classList.add("has-main-card-ornament");
+        document.body.style.setProperty("--main-card-ornament", `url('${normalizedPath}')`);
+    };
+
+    testImage.onerror = () => {
+        document.body.classList.remove("has-main-card-ornament");
+        document.body.style.setProperty("--main-card-ornament", "none");
+    };
+
+    testImage.src = normalizedPath;
 }
 
 function setCityMenuOpen(open) {

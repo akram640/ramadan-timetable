@@ -2,6 +2,7 @@
     --font-ui: "Noto Sans", "Segoe UI", Tahoma, sans-serif;
     --font-display: "El Messiri", "Noto Sans", sans-serif;
     --font-arabic: "Noto Naskh Arabic", "Amiri", serif;
+    --main-card-ornament: none;
     --city-bg-image: none;
     --bg-a: #eaf0e8;
     --bg-b: #f7f3e8;
@@ -349,8 +350,36 @@ main {
 }
 
 .main-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     padding: 20px 22px 18px;
+    background: linear-gradient(160deg, #ffffff 0%, #f1f6ef 100%);
     text-align: center;
+}
+
+.main-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: var(--main-card-ornament);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+body.has-main-card-ornament .main-card::before {
+    opacity: 0.26;
+    filter: saturate(82%) contrast(92%);
+}
+
+.main-card > * {
+    position: relative;
+    z-index: 1;
 }
 
 .main-card .label,
@@ -371,14 +400,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-}
-
-.countdown-icon {
-    width: clamp(38px, 7.2vw, 60px);
-    aspect-ratio: 1;
-    object-fit: contain;
-    filter: drop-shadow(0 3px 8px rgba(94, 73, 26, 0.28));
+    gap: 0;
 }
 
 .label {
@@ -712,8 +734,9 @@ body[data-theme="dark"] #countdown {
     text-shadow: 0 2px 8px rgba(21, 11, 2, 0.32);
 }
 
-body[data-theme="dark"] .countdown-icon {
-    filter: drop-shadow(0 3px 9px rgba(10, 6, 1, 0.28));
+body[data-theme="dark"].has-main-card-ornament .main-card::before {
+    opacity: 0.16;
+    filter: saturate(75%) brightness(0.9) contrast(95%);
 }
 
 body[data-theme="dark"] .main-card,
