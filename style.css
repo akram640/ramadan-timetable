@@ -32,6 +32,7 @@ body {
     display: grid;
     place-items: center;
     padding: 18px;
+    transition: background 0.35s ease, color 0.35s ease;
 }
 
 body::before {
@@ -46,6 +47,23 @@ body::before {
     background-repeat: no-repeat;
     opacity: 0.14;
     filter: saturate(70%) blur(1px);
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    background-image:
+        radial-gradient(circle at 15% 18%, #ffffff 0 1.2px, transparent 1.8px),
+        radial-gradient(circle at 72% 12%, #ffffff 0 1px, transparent 1.7px),
+        radial-gradient(circle at 46% 37%, #ffffff 0 0.9px, transparent 1.6px),
+        radial-gradient(circle at 83% 41%, #ffffff 0 1.2px, transparent 1.8px),
+        radial-gradient(circle at 28% 63%, #ffffff 0 1px, transparent 1.6px),
+        radial-gradient(circle at 63% 79%, #ffffff 0 1px, transparent 1.7px);
 }
 
 .app {
@@ -89,6 +107,40 @@ body::before {
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-weight: 700;
+}
+
+.theme-toggle {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    border: 1px solid #c9d8ca;
+    background: linear-gradient(140deg, #ffffffde 0%, #eef4eb 100%);
+    color: #315f4a;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: 0 5px 16px rgba(45, 108, 81, 0.16);
+    font-size: 1.15rem;
+    line-height: 1;
+    transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.3s ease, background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.theme-toggle:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.04);
+}
+
+.theme-toggle:focus-visible {
+    outline: none;
+    border-color: #7aa38a;
+    box-shadow: 0 0 0 3px #7da58c33, 0 6px 20px rgba(45, 108, 81, 0.2);
+}
+
+.theme-toggle-floating {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 35;
 }
 
 #citySelect {
@@ -253,6 +305,20 @@ body::before {
 .icon-btn:active,
 .close-btn:active {
     transform: translateY(0);
+}
+
+.app,
+.main-card,
+.time-card,
+.quote-card,
+.city-toggle,
+.city-menu,
+.time-row,
+.icon-btn,
+.close-btn,
+.modal-content,
+.day-item {
+    transition: background 0.35s ease, border-color 0.35s ease, color 0.35s ease, box-shadow 0.35s ease;
 }
 
 main {
@@ -478,6 +544,192 @@ main {
     font-size: 1rem;
 }
 
+body[data-theme="dark"] {
+    --bg-a: #062345;
+    --bg-b: #031227;
+    --card: rgba(28, 61, 106, 0.6);
+    --ink: #eaf3ff;
+    --muted: #b7cbe7;
+    --brand: #f2f7ff;
+    --brand-soft: #234c80;
+    --accent: #efc16b;
+    --line: rgba(171, 204, 247, 0.3);
+    --shadow-lg: 0 24px 65px rgba(0, 8, 22, 0.58);
+    --shadow-md: 0 12px 28px rgba(2, 13, 35, 0.44);
+    color-scheme: dark;
+    background:
+        radial-gradient(circle at 16% 16%, #9ac4ff3d 0, transparent 34%),
+        radial-gradient(circle at 82% 14%, #8cb8f634 0, transparent 31%),
+        radial-gradient(circle at 56% 84%, #7eb2f133 0, transparent 42%),
+        linear-gradient(168deg, #03274c 0%, #041734 56%, #020f22 100%);
+}
+
+body[data-theme="dark"]::before {
+    opacity: 0.22;
+    filter: saturate(80%) brightness(0.5) blur(1px);
+}
+
+body[data-theme="dark"]::after {
+    opacity: 0.2;
+}
+
+body[data-theme="dark"] .app {
+    border-color: rgba(144, 183, 235, 0.3);
+    background:
+        radial-gradient(circle at 20% -10%, #b0d3ff38 0, transparent 44%),
+        linear-gradient(160deg, #0e315dbd 0%, #08224adb 100%);
+    box-shadow: var(--shadow-lg);
+}
+
+body[data-theme="dark"] .app::before {
+    background: radial-gradient(circle, #84b7f55f 0, #84b7f533 34%, transparent 70%);
+}
+
+body[data-theme="dark"] .city-switcher label {
+    color: #d6e8ff;
+}
+
+body[data-theme="dark"] .theme-toggle {
+    border-color: rgba(164, 198, 241, 0.42);
+    background: linear-gradient(145deg, #2d69a0 0%, #1f4b7b 100%);
+    color: #f4f9ff;
+    box-shadow: 0 8px 22px rgba(1, 14, 38, 0.44);
+}
+
+body[data-theme="dark"] .theme-toggle:focus-visible {
+    border-color: #91bdf7;
+    box-shadow: 0 0 0 3px #9bc3f340, 0 6px 20px rgba(0, 10, 28, 0.4);
+}
+
+body[data-theme="dark"] .city-toggle {
+    border-color: rgba(221, 235, 255, 0.76);
+    background: linear-gradient(155deg, #fffffffa 0%, #eaf3fff0 100%);
+    color: #113663;
+    box-shadow: 0 8px 23px rgba(1, 12, 32, 0.3);
+}
+
+body[data-theme="dark"] .city-toggle:focus-visible {
+    border-color: #8cb8ef;
+    box-shadow: 0 0 0 3px #9dc6f545, 0 6px 20px rgba(0, 9, 25, 0.35);
+}
+
+body[data-theme="dark"] .city-chevron {
+    color: #355b87;
+}
+
+body[data-theme="dark"] .city-menu {
+    background: #133664f2;
+    border-color: rgba(154, 188, 232, 0.32);
+    box-shadow: 0 16px 34px rgba(0, 6, 18, 0.5);
+}
+
+body[data-theme="dark"] .city-option {
+    color: #e4f1ff;
+}
+
+body[data-theme="dark"] .city-option:hover {
+    background: #84b4ea24;
+}
+
+body[data-theme="dark"] .city-option.active {
+    background: linear-gradient(145deg, #3e71aa, #2d5689);
+    color: #fff;
+}
+
+body[data-theme="dark"] .app-title {
+    color: #f5f9ff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.38);
+}
+
+body[data-theme="dark"] .label {
+    color: #bed3ef;
+}
+
+body[data-theme="dark"] .current-city {
+    color: #d8e9ff;
+}
+
+body[data-theme="dark"] #ramadanDay {
+    color: #f8fbff;
+}
+
+body[data-theme="dark"] .status-text {
+    color: #d9e8ff;
+}
+
+body[data-theme="dark"] #countdown {
+    color: #efc16b;
+    text-shadow: 0 3px 14px rgba(21, 11, 2, 0.45);
+}
+
+body[data-theme="dark"] .main-card,
+body[data-theme="dark"] .time-card,
+body[data-theme="dark"] .quote-card {
+    background: linear-gradient(160deg, #4e7fbe42 0%, #1e3f6e70 100%);
+    border-color: rgba(164, 198, 240, 0.3);
+    box-shadow: 0 14px 34px rgba(0, 10, 30, 0.43);
+}
+
+body[data-theme="dark"] .time-row {
+    background: linear-gradient(128deg, #2f629f9c 0%, #22487fb8 100%);
+    border-color: rgba(162, 198, 244, 0.26);
+    color: #dfeeff;
+}
+
+body[data-theme="dark"] .time-row strong {
+    color: #f4f9ff;
+}
+
+body[data-theme="dark"] #quote {
+    color: #e3f0ff;
+}
+
+body[data-theme="dark"] .icon-btn,
+body[data-theme="dark"] .close-btn {
+    background: linear-gradient(156deg, #2e689f 0%, #1f4d80 100%);
+    box-shadow: 0 9px 22px rgba(1, 10, 30, 0.45);
+}
+
+body[data-theme="dark"] .modal {
+    background: linear-gradient(180deg, #010b20e3, #010814f0);
+    backdrop-filter: blur(4px);
+}
+
+body[data-theme="dark"] .modal-content {
+    background: linear-gradient(160deg, #0f315ce8 0%, #0a2347f5 100%);
+    border-color: rgba(154, 188, 232, 0.34);
+    color: #eaf3ff;
+}
+
+body[data-theme="dark"] .modal-content h3,
+body[data-theme="dark"] .modal-content h4 {
+    color: #f3f8ff;
+}
+
+body[data-theme="dark"] .arabic {
+    color: #f4f9ff;
+}
+
+body[data-theme="dark"] .translation {
+    color: #c9dcf8;
+}
+
+body[data-theme="dark"] .day-item {
+    border-color: rgba(158, 193, 238, 0.26);
+    background: #1b4476b8;
+    color: #e1efff;
+}
+
+body[data-theme="dark"] .day-item.current {
+    border-color: rgba(240, 206, 129, 0.66);
+    background: linear-gradient(148deg, #5989c56b, #315d9cb8);
+    box-shadow: 0 8px 20px rgba(0, 8, 24, 0.46);
+}
+
+body[data-theme="dark"] .day-label {
+    color: #f4f9ff;
+}
+
 @keyframes rise {
     from {
         opacity: 0;
@@ -493,6 +745,11 @@ main {
     .app {
         border-radius: 24px;
         padding: 14px;
+    }
+
+    .theme-toggle-floating {
+        top: 12px;
+        right: 12px;
     }
 
     .top-bar {

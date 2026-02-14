@@ -4,11 +4,14 @@ let cityLookupByFile = {};
 let currentDayIndex = -1;
 let countdownInterval = null;
 let selectedCityFile = "";
+const THEME_STORAGE_KEY = "ramadan_theme";
+let currentTheme = "light";
 
 document.addEventListener("DOMContentLoaded", initApp);
 
 async function initApp() {
     wireEvents();
+    initTheme();
     updateTodayDateDisplay();
 
     if (typeof randomQuote === "function") {
@@ -40,6 +43,7 @@ async function initApp() {
 function wireEvents() {
     document.getElementById("duaBtn")?.addEventListener("click", () => openModal("duaModal"));
     document.getElementById("daysBtn")?.addEventListener("click", () => openModal("daysModal"));
+    document.getElementById("themeToggle")?.addEventListener("click", toggleTheme);
 
     const cityToggle = document.getElementById("cityToggle");
     cityToggle?.addEventListener("click", () => {
@@ -69,6 +73,74 @@ function wireEvents() {
             setCityMenuOpen(false);
         }
     });
+}
+
+function initTheme() {
+    const savedTheme = readStorage(THEME_STORAGE_KEY);
+    const prefersDark = getSystemPrefersDark();
+    const initialTheme =
+        savedTheme === "dark" || savedTheme === "light"
+            ? savedTheme
+            : prefersDark
+                ? "dark"
+                : "light";
+
+    applyTheme(initialTheme, { persist: false });
+}
+
+function toggleTheme() {
+    const nextTheme = currentTheme === "dark" ? "light" : "dark";
+    applyTheme(nextTheme, { persist: true });
+}
+
+function applyTheme(theme, options = {}) {
+    const { persist = true } = options;
+    const normalizedTheme = theme === "dark" ? "dark" : "light";
+    const isDark = normalizedTheme === "dark";
+
+    currentTheme = normalizedTheme;
+    document.body.setAttribute("data-theme", normalizedTheme);
+
+    const toggle = document.getElementById("themeToggle");
+    const icon = document.getElementById("themeToggleIcon");
+
+    if (toggle) {
+        const label = isDark ? "Switch to light theme" : "Switch to dark theme";
+        toggle.setAttribute("aria-pressed", isDark ? "true" : "false");
+        toggle.setAttribute("aria-label", label);
+        toggle.setAttribute("title", label);
+    }
+
+    if (icon) {
+        icon.innerText = isDark ? "☀" : "☾";
+    }
+
+    if (persist) writeStorage(THEME_STORAGE_KEY, normalizedTheme);
+}
+
+function getSystemPrefersDark() {
+    try {
+        if (!window.matchMedia) return false;
+        return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    } catch {
+        return false;
+    }
+}
+
+function readStorage(key) {
+    try {
+        return localStorage.getItem(key);
+    } catch {
+        return null;
+    }
+}
+
+function writeStorage(key, value) {
+    try {
+        localStorage.setItem(key, value);
+    } catch {
+        // Ignore storage failures; theme still applies for current session.
+    }
 }
 
 function setCityMenuOpen(open) {
