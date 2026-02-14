@@ -2,6 +2,7 @@
     --font-ui: "Noto Sans", "Segoe UI", Tahoma, sans-serif;
     --font-display: "El Messiri", "Noto Sans", sans-serif;
     --font-arabic: "Noto Naskh Arabic", "Amiri", serif;
+    --font-time: "Cairo", "Noto Sans", sans-serif;
     --main-card-ornament: none;
     --city-bg-image: none;
     --bg-a: #eaf0e8;
@@ -437,7 +438,9 @@ body.has-main-card-ornament .main-card::before {
     margin: 0;
     font-size: clamp(1.9rem, 9vw, 3rem);
     line-height: 1;
+    font-family: var(--font-time);
     font-weight: 800;
+    letter-spacing: 0.01em;
     color: var(--accent);
     font-variant-numeric: tabular-nums;
     text-shadow: 0 2px 0 #fff;
@@ -482,9 +485,11 @@ body.has-main-card-ornament .main-card::before {
 
 .time-row strong {
     font-size: 1.95rem;
-    letter-spacing: 0.03em;
+    font-family: var(--font-time);
+    letter-spacing: 0.012em;
     font-weight: 800;
     color: #21372c;
+    font-variant-numeric: tabular-nums;
 }
 
 #quote {
