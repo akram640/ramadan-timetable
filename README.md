@@ -129,11 +129,9 @@ What you can do:
 - Watch live countdown to next Sehri/Iftar
 - Read rotating daily motivation quote
 
-Screenshot placeholder (you can replace later):
+Screenshot:
 
-```md
 ![Home Screen](./assets/screenshots/home.png)
-```
 
 ### Screen 2: Dua Screen
 
@@ -146,11 +144,9 @@ What it shows:
 - Suhoor dua (Arabic + translation)
 - Iftar dua (Arabic + translation)
 
-Screenshot placeholder:
+Screenshot:
 
-```md
 ![Dua Screen](./assets/screenshots/dua.png)
-```
 
 ### Screen 3: Full Ramadan Timetable Screen
 
@@ -164,11 +160,9 @@ What it shows:
 - Sehri and Iftar for each day
 - Highlights current day
 
-Screenshot placeholder:
+Screenshot:
 
-```md
 ![Full Timetable Screen](./assets/screenshots/full-timetable.png)
-```
 
 ## Run Locally
 
