@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Iftar meal icon">
+  <defs>
+    <linearGradient id="mealBg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ecf5ee"/>
+      <stop offset="100%" stop-color="#dbece0"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="20" width="112" height="90" rx="24" fill="url(#mealBg)"/>
+  <circle cx="48" cy="74" r="24" fill="#f8fffa" stroke="#9dbca5" stroke-width="3"/>
+  <circle cx="41" cy="67" r="6" fill="#cc9a54"/>
+  <circle cx="50" cy="72" r="5" fill="#b37e41"/>
+  <circle cx="58" cy="67" r="6" fill="#d4a35b"/>
+  <rect x="76" y="56" width="16" height="24" rx="4" fill="#f8fffa" stroke="#9dbca5" stroke-width="3"/>
+  <rect x="80" y="46" width="8" height="10" rx="3" fill="#9dc7b5"/>
+  <path d="M96 52v30M102 52v30" stroke="#89ad93" stroke-width="3" stroke-linecap="round"/>
+  <path d="M106 52v18" stroke="#89ad93" stroke-width="3" stroke-linecap="round"/>
+</svg>

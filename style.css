@@ -366,6 +366,21 @@ main {
     padding: 16px;
 }
 
+.countdown-wrap {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.countdown-icon {
+    width: clamp(38px, 7.2vw, 60px);
+    aspect-ratio: 1;
+    object-fit: contain;
+    filter: drop-shadow(0 3px 8px rgba(94, 73, 26, 0.28));
+}
+
 .label {
     margin: 0;
     color: var(--muted);
@@ -397,7 +412,7 @@ main {
 }
 
 #countdown {
-    margin: 14px 0 0;
+    margin: 0;
     font-size: clamp(1.9rem, 9vw, 3rem);
     line-height: 1;
     font-weight: 800;
@@ -420,6 +435,27 @@ main {
     background: linear-gradient(120deg, #ecf3ea 0%, var(--brand-soft) 100%);
     font-size: 1.06rem;
     border: 1px solid #dbe8da;
+}
+
+.time-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.time-meta span {
+    font-weight: 500;
+}
+
+.time-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+    padding: 4px;
+    object-fit: contain;
+    background: #ecf4ed;
+    border: 1px solid #d6e3d5;
 }
 
 .time-row strong {
@@ -676,6 +712,10 @@ body[data-theme="dark"] #countdown {
     text-shadow: 0 2px 8px rgba(21, 11, 2, 0.32);
 }
 
+body[data-theme="dark"] .countdown-icon {
+    filter: drop-shadow(0 3px 9px rgba(10, 6, 1, 0.28));
+}
+
 body[data-theme="dark"] .main-card,
 body[data-theme="dark"] .time-card,
 body[data-theme="dark"] .quote-card {
@@ -688,6 +728,11 @@ body[data-theme="dark"] .time-row {
     background: linear-gradient(128deg, #2c578a8f 0%, #213f6994 100%);
     border-color: rgba(152, 187, 230, 0.22);
     color: #dfeeff;
+}
+
+body[data-theme="dark"] .time-icon {
+    background: rgba(202, 224, 248, 0.12);
+    border-color: rgba(177, 207, 244, 0.28);
 }
 
 body[data-theme="dark"] .time-row strong {

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Ramadan moon icon">
+  <defs>
+    <linearGradient id="moonFill" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f4d48c"/>
+      <stop offset="100%" stop-color="#c59031"/>
+    </linearGradient>
+    <radialGradient id="moonGlow" cx="0.5" cy="0.5" r="0.6">
+      <stop offset="0%" stop-color="#fff7dc" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#fff7dc" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="64" cy="64" r="58" fill="url(#moonGlow)"/>
+  <path d="M80 22c-18 4-32 20-32 40s14 36 32 40c-27 6-54-13-54-40s27-46 54-40z" fill="url(#moonFill)"/>
+  <path d="M92 32l2.6 7.4L102 42l-7.4 2.6L92 52l-2.6-7.4L82 42l7.4-2.6L92 32z" fill="#f1ce7a"/>
+</svg>

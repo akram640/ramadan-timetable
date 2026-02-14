@@ -41,16 +41,25 @@
             <p id="currentCity" class="current-city"></p>
             <h2 id="ramadanDay">Loading...</h2>
             <h3 id="statusText" class="status-text"></h3>
-            <p id="countdown" aria-live="polite">--:--:--</p>
+            <div class="countdown-wrap">
+                <img class="countdown-icon" src="assets/icons/ramadan-moon.svg" alt="" aria-hidden="true" />
+                <p id="countdown" aria-live="polite">--:--:--</p>
+            </div>
         </section>
 
         <section class="time-card">
             <div class="time-row">
-                <span>Sehri</span>
+                <div class="time-meta">
+                    <img class="time-icon" src="assets/icons/sehri-cup.svg" alt="" aria-hidden="true" />
+                    <span>Sehri</span>
+                </div>
                 <strong id="sehriTime">--</strong>
             </div>
             <div class="time-row">
-                <span>Iftar</span>
+                <div class="time-meta">
+                    <img class="time-icon" src="assets/icons/iftar-meal.svg" alt="" aria-hidden="true" />
+                    <span>Iftar</span>
+                </div>
                 <strong id="iftarTime">--</strong>
             </div>
         </section>
