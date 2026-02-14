@@ -131,7 +131,9 @@ What you can do:
 
 Screenshot:
 
-![Home Screen](./assets/screenshots/home.png)
+<a href="./assets/screenshots/home.png">
+  <img src="./assets/screenshots/home.png" alt="Home Screen" width="360" />
+</a>
 
 ### Screen 2: Dua Screen
 
@@ -146,7 +148,9 @@ What it shows:
 
 Screenshot:
 
-![Dua Screen](./assets/screenshots/dua.png)
+<a href="./assets/screenshots/dua.png">
+  <img src="./assets/screenshots/dua.png" alt="Dua Screen" width="360" />
+</a>
 
 ### Screen 3: Full Ramadan Timetable Screen
 
@@ -162,7 +166,9 @@ What it shows:
 
 Screenshot:
 
-![Full Timetable Screen](./assets/screenshots/full-timetable.png)
+<a href="./assets/screenshots/full-timetable.png">
+  <img src="./assets/screenshots/full-timetable.png" alt="Full Timetable Screen" width="360" />
+</a>
 
 ## Run Locally
 
