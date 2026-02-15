@@ -216,6 +216,7 @@ function loadCityConfig() {
 
 function mapCityRow(row, index) {
     const city = String(row.city || row.City || "").trim();
+    const country = String(row.country || row.Country || "").trim();
     const file = String(row.file || row.File || "").trim();
     const bgRaw = String(row.bg || row.Bg || row.background || row.Background || "").trim();
 
@@ -225,10 +226,13 @@ function mapCityRow(row, index) {
     const key = getCityKey(normalizedFile, city, index);
     const csvPath = normalizedFile.includes("/") ? normalizedFile : `data/${normalizedFile}`;
     const bgPath = bgRaw || `assets/cities/${key}.jpg`;
+    const displayLabel = country ? `${city}, ${country}` : city;
 
     return {
         id: key,
-        label: city,
+        city,
+        country,
+        displayLabel,
         file: normalizedFile,
         csv: csvPath,
         bg: bgPath
@@ -269,15 +273,27 @@ function initCitySelector() {
     cityConfig.forEach(city => {
         const option = document.createElement("option");
         option.value = city.file;
-        option.textContent = city.label;
+        option.textContent = city.displayLabel;
         select.appendChild(option);
 
         const item = document.createElement("button");
         item.type = "button";
         item.className = "city-option";
         item.setAttribute("role", "option");
+        item.setAttribute("aria-label", city.displayLabel);
         item.dataset.file = city.file;
-        item.textContent = city.label;
+
+        const cityName = document.createElement("span");
+        cityName.className = "city-option-city";
+        cityName.innerText = city.city;
+        item.appendChild(cityName);
+
+        if (city.country) {
+            const countryName = document.createElement("span");
+            countryName.className = "city-option-country";
+            countryName.innerText = `, ${city.country}`;
+            item.appendChild(countryName);
+        }
 
         item.addEventListener("click", () => {
             setSelectedCity(city.file, { load: true, persist: true });
@@ -299,7 +315,7 @@ function setSelectedCity(fileName, options = {}) {
     if (select) select.value = city.file;
 
     const text = document.getElementById("cityToggleText");
-    if (text) text.innerText = city.label;
+    if (text) text.innerText = city.displayLabel;
 
     document.querySelectorAll(".city-option").forEach(option => {
         const isSelected = option.dataset.file === city.file;
@@ -317,7 +333,7 @@ function loadCityData(fileName) {
 
     closeAllModals();
     applyCityBackground(city.bg);
-    document.getElementById("currentCity").innerText = city.label;
+    document.getElementById("currentCity").innerText = city.city;
     setStatus("Loading timetable...");
 
     if (countdownInterval) {

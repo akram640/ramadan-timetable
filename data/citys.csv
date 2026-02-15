@@ -1,13 +1,13 @@
-city,file
-Dammam Saudi Arabia,ramadan_dammam.csv
-New Delhi India,ramadan_delhi.csv
-Jeddah Saudi Arabia,ramadan_jeddah.csv
-London UK,ramadan_london.csv
-Moradabad India,ramadan_moradabad.csv
-Mumbai India,ramadan_mumbai.csv
-Riyadh Saudi Arabia,ramadan_riyadh.csv
-Wollongong Australia,ramadan_wollongong.csv
-Navi Mumbai India,ramadan_navimumbai.csv
-New Jersey USA, ramadan_newjersey.csv
-Hyderabad India, ramadan_hyderabad.csv
-Noida India, ramadan_noida.csv
+city,country,file
+Dammam,Saudi Arabia,ramadan_dammam.csv
+New Delhi,India,ramadan_delhi.csv
+Jeddah,Saudi Arabia,ramadan_jeddah.csv
+London,UK,ramadan_london.csv
+Moradabad,India,ramadan_moradabad.csv
+Mumbai,India,ramadan_mumbai.csv
+Riyadh,Saudi Arabia,ramadan_riyadh.csv
+Wollongong,Australia,ramadan_wollongong.csv
+Navi Mumbai,India,ramadan_navimumbai.csv
+New Jersey,USA,ramadan_newjersey.csv
+Hyderabad,India,ramadan_hyderabad.csv
+Noida,India,ramadan_noida.csv

@@ -216,6 +216,13 @@ body.modal-open .theme-toggle-floating {
     box-shadow: 0 5px 16px rgba(45, 108, 81, 0.12);
 }
 
+#cityToggleText {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .city-toggle:focus-visible {
     outline: none;
     border-color: #7aa38a;
@@ -264,6 +271,21 @@ body.modal-open .theme-toggle-floating {
     font-weight: 600;
     cursor: pointer;
     font-family: var(--font-ui);
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    line-height: 1.25;
+}
+
+.city-option-city {
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+.city-option-country {
+    color: #5b6f84;
+    font-size: 0.96em;
+    font-weight: 600;
 }
 
 .city-option:hover {
@@ -273,6 +295,10 @@ body.modal-open .theme-toggle-floating {
 .city-option.active {
     background: linear-gradient(145deg, #3e7c5e, #2f654c);
     color: #fff;
+}
+
+.city-option.active .city-option-country {
+    color: #eff8f1;
 }
 
 .app-title {
@@ -718,6 +744,10 @@ body[data-theme="dark"] .city-option {
     color: #e4f1ff;
 }
 
+body[data-theme="dark"] .city-option-country {
+    color: #bed6f3;
+}
+
 body[data-theme="dark"] .city-option:hover {
     background: #84b4ea24;
 }
@@ -725,6 +755,10 @@ body[data-theme="dark"] .city-option:hover {
 body[data-theme="dark"] .city-option.active {
     background: linear-gradient(145deg, #3e71aa, #2d5689);
     color: #fff;
+}
+
+body[data-theme="dark"] .city-option.active .city-option-country {
+    color: #eaf3ff;
 }
 
 body[data-theme="dark"] .app-title {
