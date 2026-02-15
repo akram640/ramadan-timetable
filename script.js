@@ -101,7 +101,9 @@ function applyTheme(theme, options = {}) {
     const isDark = normalizedTheme === "dark";
 
     currentTheme = normalizedTheme;
+    document.documentElement.setAttribute("data-theme", normalizedTheme);
     document.body.setAttribute("data-theme", normalizedTheme);
+    updateThemeColor(isDark);
 
     const toggle = document.getElementById("themeToggle");
     const icon = document.getElementById("themeToggleIcon");
@@ -118,6 +120,19 @@ function applyTheme(theme, options = {}) {
     }
 
     if (persist) writeStorage(THEME_STORAGE_KEY, normalizedTheme);
+}
+
+function updateThemeColor(isDark) {
+    const themeColor = isDark ? "#06162d" : "#eaf0e8";
+    let themeColorMeta = document.querySelector('meta[name="theme-color"]');
+
+    if (!themeColorMeta) {
+        themeColorMeta = document.createElement("meta");
+        themeColorMeta.setAttribute("name", "theme-color");
+        document.head.appendChild(themeColorMeta);
+    }
+
+    themeColorMeta.setAttribute("content", themeColor);
 }
 
 function getSystemPrefersDark() {
@@ -480,12 +495,35 @@ function buildDaysList() {
         dayLabel.innerText = `Day ${day.Day}`;
 
         const timing = document.createElement("span");
-        timing.innerText = `${day.Date} | Sehri: ${formatToAmPm(day.Sehri)} | Iftar: ${formatToAmPm(day.Iftar)}`;
+        timing.innerText = `${formatListDate(day.Date)} | Sehri: ${formatToAmPm(day.Sehri)} | Iftar: ${formatToAmPm(day.Iftar)}`;
 
         item.appendChild(dayLabel);
         item.appendChild(timing);
         container.appendChild(item);
     });
+}
+
+function formatListDate(dateStr) {
+    const date = parseDateOnly(dateStr);
+    if (Number.isNaN(date.getTime())) return String(dateStr || "");
+
+    const parts = new Intl.DateTimeFormat("en-GB", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+    }).formatToParts(date);
+
+    const dateParts = {};
+    parts.forEach(part => {
+        if (part.type !== "literal") dateParts[part.type] = part.value;
+    });
+
+    if (!dateParts.weekday || !dateParts.day || !dateParts.month || !dateParts.year) {
+        return String(dateStr || "");
+    }
+
+    return `${dateParts.weekday} ${dateParts.day} ${dateParts.month} ${dateParts.year}`;
 }
 
 function toDateTime(dateStr, timeStr) {
