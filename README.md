@@ -119,6 +119,7 @@ For this project, use this flow:
    - Use for coding and testing locally.
    - Dev (Local): [http://localhost:5500/](http://localhost:5500/)
    - Note: this URL runs on your machine only and is not a shared deployment link.
+   - `python3 -m http.server 5500`
 2. `main` branch:
    - Merge `dev` into `main`.
    - Test the app through deployment (staging validation).
