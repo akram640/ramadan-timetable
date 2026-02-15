@@ -45,15 +45,16 @@ File: `data/citys.csv`
 
 Expected columns:
 
-- `city` (display name in dropdown)
+- `city` (city name in dropdown)
+- `country` (country name shown with city)
 - `file` (CSV file name inside `data/`)
 - `bg` (optional custom city background image path)
 
 Example:
 
 ```csv
-city,file
-Delhi,ramadan_delhi.csv
+city,country,file
+Delhi,India,ramadan_delhi.csv
 ```
 
 ### Ramadan Timetable Per City
@@ -91,7 +92,7 @@ Day,RamadanDate,Date,Sehri,Iftar
 3. Add a new timetable file in `data/`:
    - `data/ramadan_<yourcity>.csv`
 4. Add your city entry in `data/citys.csv`:
-   - Add `city` and `file` values.
+   - Add `city`, `country`, and `file` values.
    - Optional: add `bg` if you want a custom image path.
 5. Add city image to `assets/cities/`:
    - Recommended file name: `<yourcity>.jpg`
@@ -119,6 +120,7 @@ For this project, use this flow:
    - Use for coding and testing locally.
    - Dev (Local): [http://localhost:5500/](http://localhost:5500/)
    - Note: this URL runs on your machine only and is not a shared deployment link.
+   - `python3 -m http.server 5500`
 2. `main` branch:
    - Merge `dev` into `main`.
    - Test the app through deployment (staging validation).
