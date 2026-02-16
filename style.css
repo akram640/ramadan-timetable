@@ -117,12 +117,53 @@ body::after {
     margin-bottom: 12px;
 }
 
+.city-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+}
+
 .city-switcher label {
     color: var(--muted);
     font-size: 0.84rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-weight: 700;
+}
+
+.city-help-btn {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #86a394;
+    border-radius: 999px;
+    background: #f3f8f4;
+    color: #4f6f60;
+    font-family: var(--font-ui);
+    font-size: 0.72rem;
+    font-weight: 800;
+    line-height: 1;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    padding: 0;
+    opacity: 0.98;
+    transition: color 0.2s ease, transform 0.2s ease, opacity 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.city-help-btn:hover {
+    color: #335f4b;
+    background: #ffffff;
+    border-color: #739785;
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+.city-help-btn:focus-visible {
+    outline: none;
+    color: #2e5a47;
+    border-color: #6f9680;
+    box-shadow: 0 0 0 2px #7da58c42;
 }
 
 .theme-toggle {
@@ -206,7 +247,7 @@ body.modal-open .theme-toggle-floating {
     border-radius: 14px;
     padding: 12px 14px;
     font-family: var(--font-ui);
-    font-size: 1.06rem;
+    font-size: clamp(1.1rem, 2.4vw, 1.2rem);
     font-weight: 700;
     display: flex;
     align-items: center;
@@ -359,6 +400,7 @@ body.modal-open .theme-toggle-floating {
 .time-card,
 .quote-card,
 .city-toggle,
+.city-help-btn,
 .city-menu,
 .time-row,
 .icon-btn,
@@ -601,6 +643,27 @@ body.has-main-card-ornament .main-card::before {
     letter-spacing: 0.005em;
 }
 
+.city-help-text {
+    margin: 0;
+    color: #345145;
+    font-size: 1.03rem;
+    line-height: 1.55;
+}
+
+.city-help-text + .city-help-text {
+    margin-top: 10px;
+}
+
+.city-help-text a {
+    color: #2c6f54;
+    font-weight: 700;
+    text-decoration-thickness: 1.5px;
+}
+
+.city-help-text a:hover {
+    color: #235840;
+}
+
 .days-list {
     display: grid;
     gap: 8px;
@@ -704,6 +767,25 @@ body[data-theme="dark"] .app::before {
 
 body[data-theme="dark"] .city-switcher label {
     color: #d6e8ff;
+}
+
+body[data-theme="dark"] .city-help-btn {
+    border-color: rgba(178, 206, 238, 0.46);
+    background: rgba(159, 195, 236, 0.2);
+    color: #d7e9ff;
+    opacity: 1;
+}
+
+body[data-theme="dark"] .city-help-btn:hover {
+    color: #f2f8ff;
+    background: rgba(178, 210, 244, 0.28);
+    border-color: rgba(198, 222, 248, 0.62);
+}
+
+body[data-theme="dark"] .city-help-btn:focus-visible {
+    color: #f2f8ff;
+    border-color: rgba(203, 228, 255, 0.74);
+    box-shadow: 0 0 0 2px #9dc6f560;
 }
 
 body[data-theme="dark"] .theme-toggle {
@@ -847,6 +929,18 @@ body[data-theme="dark"] .arabic {
 
 body[data-theme="dark"] .translation {
     color: #c9dcf8;
+}
+
+body[data-theme="dark"] .city-help-text {
+    color: #d9e9ff;
+}
+
+body[data-theme="dark"] .city-help-text a {
+    color: #f3c977;
+}
+
+body[data-theme="dark"] .city-help-text a:hover {
+    color: #ffd990;
 }
 
 body[data-theme="dark"] .day-item {
