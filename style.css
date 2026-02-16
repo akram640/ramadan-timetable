@@ -62,6 +62,7 @@ body::before {
     background-repeat: no-repeat;
     opacity: 0.14;
     filter: saturate(70%) blur(1px);
+    transition: opacity 0.55s ease, filter 0.55s ease;
 }
 
 body::after {
@@ -81,6 +82,11 @@ body::after {
         radial-gradient(circle at 63% 79%, #ffffff 0 1px, transparent 1.7px);
 }
 
+body.has-main-card-focus::before {
+    opacity: 0.24;
+    filter: saturate(58%) blur(8px);
+}
+
 .app {
     width: min(100%, 840px);
     border-radius: 30px;
@@ -91,6 +97,7 @@ body::after {
     box-shadow: var(--shadow-lg);
     position: relative;
     overflow: hidden;
+    transition: box-shadow 0.55s ease, border-color 0.55s ease;
 }
 
 .app::before {
@@ -101,6 +108,34 @@ body::after {
     aspect-ratio: 1;
     background: radial-gradient(circle, #e8f0df 0, #e8f0df99 36%, transparent 70%);
     pointer-events: none;
+}
+
+.app::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(circle at 50% 42%, rgba(1, 12, 30, 0.08) 0%, rgba(1, 10, 24, 0.34) 74%);
+    -webkit-backdrop-filter: blur(0);
+    backdrop-filter: blur(0);
+    transition: opacity 0.55s ease, -webkit-backdrop-filter 0.55s ease, backdrop-filter 0.55s ease;
+}
+
+body.has-main-card-focus .app::after {
+    opacity: 1;
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+}
+
+body.has-main-card-focus .city-switcher,
+body.has-main-card-focus .top-bar,
+body.has-main-card-focus .time-card,
+body.has-main-card-focus .quote-card {
+    filter: blur(4px) saturate(86%);
+    opacity: 0.42;
+    transform: scale(0.985);
 }
 
 .top-bar {
@@ -436,9 +471,16 @@ main {
     position: relative;
     isolation: isolate;
     overflow: hidden;
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
     padding: 20px 22px 18px;
     background: linear-gradient(160deg, #ffffff 0%, #f1f6ef 100%);
     text-align: center;
+    transform: translateY(0) scale(1);
+    transition: transform 0.55s cubic-bezier(0.2, 0.9, 0.24, 1), background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease, -webkit-backdrop-filter 0.5s ease, backdrop-filter 0.5s ease;
 }
 
 .main-card::before {
@@ -452,7 +494,20 @@ main {
     background-position: center center;
     background-size: cover;
     opacity: 0;
-    transition: opacity 0.35s ease;
+    transition: opacity 0.35s ease, filter 0.45s ease, transform 0.45s ease;
+}
+
+.main-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(160deg, #f9fbf799 0%, #edf5eb8c 100%);
+    -webkit-backdrop-filter: blur(0);
+    backdrop-filter: blur(0);
+    transition: opacity 0.55s ease, -webkit-backdrop-filter 0.55s ease, backdrop-filter 0.55s ease;
 }
 
 body.has-main-card-ornament .main-card::before {
@@ -465,12 +520,131 @@ body.has-main-card-ornament .main-card::before {
     z-index: 1;
 }
 
+.main-card #todayLabel,
+.main-card .current-city,
+.main-card #ramadanDay,
+.main-card .status-text,
+.main-card .countdown-wrap,
+.main-card #countdown {
+    transition:
+        opacity 0.56s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.62s cubic-bezier(0.22, 1, 0.36, 1),
+        max-height 0.62s cubic-bezier(0.22, 1, 0.36, 1),
+        margin 0.56s cubic-bezier(0.22, 1, 0.36, 1),
+        color 0.42s ease,
+        text-shadow 0.42s ease;
+}
+
+.main-card #todayLabel,
+.main-card .current-city,
+.main-card #ramadanDay {
+    max-height: 130px;
+    opacity: 1;
+    transform: translateY(0);
+    overflow: hidden;
+}
+
+.main-card.is-moment-mode {
+    min-height: clamp(210px, 34vw, 280px);
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    transform: translateY(-12px) scale(1.018);
+    border-color: rgba(236, 189, 94, 0.56);
+    box-shadow:
+        0 24px 70px rgba(1, 11, 30, 0.5),
+        0 0 0 1px rgba(248, 214, 147, 0.26),
+        0 0 44px rgba(235, 180, 78, 0.34);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.63) 0%, rgba(241, 246, 239, 0.56) 100%);
+    -webkit-backdrop-filter: blur(10px) saturate(110%);
+    backdrop-filter: blur(10px) saturate(110%);
+    animation: momentCardPopIn 620ms cubic-bezier(0.2, 0.9, 0.24, 1) both, goldenHuePulse 3.8s ease-in-out infinite;
+}
+
+.main-card.is-moment-mode::before {
+    opacity: 0.46;
+    filter: blur(7px) saturate(80%) contrast(90%);
+    transform: scale(1.08);
+}
+
+.main-card.is-moment-mode::after {
+    opacity: 1;
+    background:
+        radial-gradient(circle at 50% 6%, rgba(248, 214, 147, 0.26) 0%, rgba(248, 214, 147, 0.06) 38%, transparent 66%),
+        linear-gradient(160deg, rgba(249, 251, 247, 0.42) 0%, rgba(237, 245, 235, 0.36) 100%);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    animation: momentOverlayPulse 3.8s ease-in-out infinite;
+}
+
+.main-card.is-moment-mode #todayLabel,
+.main-card.is-moment-mode .current-city,
+.main-card.is-moment-mode #ramadanDay {
+    max-height: 0;
+    margin: 0;
+    opacity: 0;
+    transform: translateY(-14px) scale(0.97);
+    pointer-events: none;
+}
+
+.main-card.is-moment-mode .status-text {
+    margin: 0;
+    width: 100%;
+    font-size: clamp(1.32rem, 4.9vw, 2rem);
+    color: #2c4a3a;
+    letter-spacing: 0.012em;
+    font-weight: 700;
+    text-align: center;
+    text-wrap: balance;
+}
+
+.main-card.is-moment-mode .countdown-wrap {
+    margin: 0;
+    width: 100%;
+    justify-content: center;
+}
+
+.main-card.is-moment-mode #countdown {
+    font-size: clamp(2.2rem, 10vw, 4rem);
+    color: #b77a28;
+    text-shadow: 0 10px 24px rgba(183, 122, 40, 0.18);
+    animation: countdownCalmPulse 2.7s ease-in-out infinite;
+}
+
+.main-card.is-message-only .countdown-wrap {
+    max-height: 0;
+    margin: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateY(10px);
+    pointer-events: none;
+}
+
+.main-card.is-message-only #countdown {
+    animation: none;
+}
+
+.main-card.is-message-only .status-text {
+    max-width: 16ch;
+    font-size: clamp(2rem, 8vw, 4.4rem);
+    line-height: 1.05;
+    font-weight: 800;
+    color: #a86a1d;
+}
+
 .main-card .label,
 .main-card .current-city,
 .main-card #ramadanDay,
 .main-card .status-text,
 .main-card #countdown {
     text-align: center;
+}
+
+.city-switcher,
+.top-bar,
+.time-card,
+.quote-card {
+    transition: filter 0.55s ease, opacity 0.55s ease, transform 0.55s ease;
 }
 
 .time-card,
@@ -484,6 +658,15 @@ body.has-main-card-ornament .main-card::before {
     align-items: center;
     justify-content: center;
     gap: 0;
+    max-height: 180px;
+    opacity: 1;
+    transform: translateY(0);
+    overflow: hidden;
+    transition:
+        opacity 0.56s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.62s cubic-bezier(0.22, 1, 0.36, 1),
+        max-height 0.62s cubic-bezier(0.22, 1, 0.36, 1),
+        margin 0.56s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .label {
@@ -880,6 +1063,43 @@ body[data-theme="dark"] #countdown {
     text-shadow: 0 2px 8px rgba(21, 11, 2, 0.32);
 }
 
+body[data-theme="dark"] .main-card.is-moment-mode::after {
+    background:
+        radial-gradient(circle at 50% 6%, rgba(247, 198, 108, 0.24) 0%, rgba(247, 198, 108, 0.05) 38%, transparent 66%),
+        linear-gradient(160deg, rgba(14, 43, 77, 0.5) 0%, rgba(10, 36, 63, 0.62) 100%);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+}
+
+body[data-theme="dark"] .main-card.is-moment-mode {
+    background: linear-gradient(160deg, rgba(13, 41, 71, 0.58) 0%, rgba(9, 30, 52, 0.66) 100%);
+    border-color: rgba(244, 197, 109, 0.54);
+    box-shadow:
+        0 24px 70px rgba(0, 5, 16, 0.55),
+        0 0 0 1px rgba(247, 211, 143, 0.24),
+        0 0 46px rgba(237, 176, 71, 0.4);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
+    backdrop-filter: blur(10px) saturate(120%);
+}
+
+body[data-theme="dark"] .main-card.is-moment-mode .status-text {
+    color: #e8f2ff;
+}
+
+body[data-theme="dark"] .main-card.is-moment-mode #countdown {
+    color: #ffd18a;
+    text-shadow: 0 12px 26px rgba(8, 3, 0, 0.32);
+}
+
+body[data-theme="dark"] .main-card.is-message-only .status-text {
+    color: #ffd18a;
+    text-shadow: 0 10px 24px rgba(8, 3, 0, 0.34);
+}
+
+body[data-theme="dark"].has-main-card-focus .app::after {
+    background: radial-gradient(circle at 50% 42%, rgba(1, 10, 24, 0.22) 0%, rgba(1, 8, 20, 0.52) 74%);
+}
+
 body[data-theme="dark"].has-main-card-ornament .main-card::before {
     opacity: 0.16;
     filter: saturate(75%) brightness(0.9) contrast(95%);
@@ -978,6 +1198,54 @@ body[data-theme="dark"] .day-label {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@keyframes momentCardPopIn {
+    0% {
+        opacity: 0.9;
+        transform: translateY(18px) scale(0.95);
+    }
+    65% {
+        opacity: 1;
+        transform: translateY(-14px) scale(1.024);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(-12px) scale(1.018);
+    }
+}
+
+@keyframes goldenHuePulse {
+    0%, 100% {
+        box-shadow:
+            0 24px 70px rgba(1, 11, 30, 0.5),
+            0 0 0 1px rgba(248, 214, 147, 0.26),
+            0 0 38px rgba(235, 180, 78, 0.29);
+    }
+    50% {
+        box-shadow:
+            0 28px 78px rgba(1, 11, 30, 0.54),
+            0 0 0 1px rgba(250, 219, 160, 0.34),
+            0 0 52px rgba(238, 186, 88, 0.42);
+    }
+}
+
+@keyframes momentOverlayPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.84;
+    }
+}
+
+@keyframes countdownCalmPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.025);
     }
 }
 

@@ -10,6 +10,9 @@ let lastFocusedElement = null;
 const THEME_STORAGE_KEY = "ramadan_theme";
 const MAIN_CARD_ORNAMENT_PATH = "assets/icons/main-card-bg.png";
 const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+const EVENT_PRE_WINDOW_SECONDS = 59;
+const EVENT_POST_WINDOW_SECONDS = 59;
+const EVENT_POST_WINDOW_DURATION_MS = (EVENT_POST_WINDOW_SECONDS + 1) * 1000;
 let currentTheme = "light";
 
 document.addEventListener("DOMContentLoaded", initApp);
@@ -36,6 +39,7 @@ async function initApp() {
         setSelectedCity(initialFile, { load: true, persist: false });
     } catch (error) {
         ramadanData = [];
+        setMainCardEventMode(false);
         setStatus("Unable to load city list. Check data/citys.csv.");
         document.getElementById("ramadanDay").innerText = "Unable to load";
         document.getElementById("sehriTime").innerText = "--";
@@ -479,6 +483,7 @@ function loadCityData(fileName) {
     applyCityBackground(city.bg);
     document.getElementById("currentCity").innerText = city.city;
     setStatus("Loading timetable...");
+    setMainCardEventMode(false);
     ramadanData = [];
     currentDayIndex = -1;
 
@@ -512,6 +517,7 @@ function loadCityData(fileName) {
         .catch(() => {
             ramadanData = [];
             currentDayIndex = -1;
+            setMainCardEventMode(false);
             document.getElementById("ramadanDay").innerText = "Unable to load";
             document.getElementById("sehriTime").innerText = "--";
             document.getElementById("iftarTime").innerText = "--";
@@ -600,18 +606,40 @@ function parseDateOnly(dateStr) {
 }
 
 function runCountdown() {
-    if (!ramadanData.length || currentDayIndex < 0) return;
+    if (!ramadanData.length) return;
 
     updateTodayDateDisplay();
+    const previousDayIndex = currentDayIndex;
+    updateCurrentDayIndex();
+    if (currentDayIndex < 0) return;
+
+    if (currentDayIndex !== previousDayIndex) {
+        renderStaticSections();
+        buildDaysList();
+    }
+
     const now = new Date();
     const day = ramadanData[currentDayIndex];
     if (!day) return;
 
-    let target = toDateTime(day.Date, day.Iftar);
-    let status = "Time until Iftar";
-
     const sehriCurrent = toDateTime(day.Date, day.Sehri);
     const iftarCurrent = toDateTime(day.Date, day.Iftar);
+    const sehriMoment = getEventMomentState(now, sehriCurrent, "sehri");
+    if (sehriMoment) {
+        renderEventCountdown(sehriMoment);
+        return;
+    }
+
+    const iftarMoment = getEventMomentState(now, iftarCurrent, "iftar");
+    if (iftarMoment) {
+        renderEventCountdown(iftarMoment);
+        return;
+    }
+
+    setMainCardEventMode(false);
+
+    let target = iftarCurrent;
+    let status = "Time until Iftar";
 
     if (now < sehriCurrent) {
         target = sehriCurrent;
@@ -623,14 +651,61 @@ function runCountdown() {
             status = "Time until Sehri";
         } else {
             setStatus("Ramadan timetable complete");
-            document.getElementById("countdown").innerText = "00h 00m 00s";
+            const countdown = document.getElementById("countdown");
+            if (countdown) countdown.innerText = "00h 00m 00s";
             return;
         }
     }
 
     const diffMs = Math.max(0, target - now);
-    document.getElementById("countdown").innerText = formatDuration(diffMs);
+    const countdown = document.getElementById("countdown");
+    if (countdown) countdown.innerText = formatDuration(diffMs);
     setStatus(status);
+}
+
+function getEventMomentState(now, eventDate, eventType) {
+    if (!(eventDate instanceof Date) || Number.isNaN(eventDate.getTime())) return null;
+
+    const msUntilEvent = eventDate.getTime() - now.getTime();
+    if (msUntilEvent > 0 && msUntilEvent <= EVENT_PRE_WINDOW_SECONDS * 1000) {
+        return {
+            eventType,
+            phase: "before",
+            secondsRemaining: Math.ceil(msUntilEvent / 1000)
+        };
+    }
+
+    const msSinceEvent = now.getTime() - eventDate.getTime();
+    if (msSinceEvent >= 0 && msSinceEvent < EVENT_POST_WINDOW_DURATION_MS) {
+        return {
+            eventType,
+            phase: "after",
+            secondsRemaining: EVENT_POST_WINDOW_SECONDS - Math.floor(msSinceEvent / 1000)
+        };
+    }
+
+    return null;
+}
+
+function renderEventCountdown(moment) {
+    const countdown = document.getElementById("countdown");
+    if (!countdown) return;
+
+    const isPostEventWindow = moment.phase === "after";
+
+    if (moment.eventType === "iftar") {
+        setStatus(moment.phase === "before" ? "Iftar starts in" : "It's Iftar time");
+    } else {
+        setStatus(moment.phase === "before" ? "Sehri ends in" : "Sehri time is over");
+    }
+
+    if (isPostEventWindow) {
+        countdown.innerText = "";
+    } else {
+        countdown.innerText = formatSecondsCountdown(moment.secondsRemaining);
+    }
+
+    setMainCardEventMode(true, { messageOnly: isPostEventWindow });
 }
 
 function buildDaysList() {
@@ -713,6 +788,11 @@ function formatDuration(ms) {
     return `${pad2(h)}h ${pad2(m)}m ${pad2(s)}s`;
 }
 
+function formatSecondsCountdown(seconds) {
+    const safeSeconds = Math.max(0, Math.floor(seconds));
+    return `${safeSeconds} ${safeSeconds === 1 ? "second" : "seconds"}`;
+}
+
 function pad2(value) {
     return String(value).padStart(2, "0");
 }
@@ -733,6 +813,22 @@ function updateTodayDateDisplay() {
 function setStatus(text) {
     const el = document.getElementById("statusText");
     if (el && el.innerText !== text) el.innerText = text;
+}
+
+function setMainCardEventMode(active, options = {}) {
+    const { messageOnly = false } = options;
+    const mainCard = document.querySelector(".main-card");
+    if (!mainCard) return;
+    const body = document.body;
+
+    const isActive = Boolean(active);
+    const isMessageOnly = isActive && Boolean(messageOnly);
+    mainCard.classList.toggle("is-moment-mode", isActive);
+    mainCard.classList.toggle("is-message-only", isMessageOnly);
+    if (body) body.classList.toggle("has-main-card-focus", isActive);
+
+    const countdown = document.getElementById("countdown");
+    if (countdown) countdown.setAttribute("aria-hidden", isMessageOnly ? "true" : "false");
 }
 
 function applyCityBackground(imagePath) {
