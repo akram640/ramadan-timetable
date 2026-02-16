@@ -1,7 +1,7 @@
 const quotes = [
     "'O you who believe, fasting has been prescribed for you as it was prescribed for those before you so that you may become mindful of Allah.' (Qur'an 2:183)",
     "'The month of Ramadan is that in which was revealed the Qur'an, a guidance for the people.' (Qur'an 2:185)",
-    "'...concerning Me - indeed I am near. I respond to the invocation of the supplicant when he calls upon Me.' (Qur'an 2:186)",
+    "'When My servants ask you ˹O Prophet˺ about Me: I am truly near. I respond to one’s prayer when they call upon Me. So let them respond ˹with obedience˺ to Me and believe in Me, perhaps they will be guided ˹to the Right Way˺' (Qur'an 2:186)",
     "'[Fasting for] a limited number of days. But to fast is best for you, if only you knew.' (Qur'an 2:184)",
     "'Eat and drink until the white thread of dawn becomes distinct to you from the black thread of night. Then complete the fast until the sunset.' (Qur'an 2:187)",
     "'Whoever observes fasts during the month of Ramadan out of sincere faith and hoping to attain Allah's rewards, then all his past sins will be forgiven.' (Sahih al-Bukhari 38, Sahih Muslim 760)",
