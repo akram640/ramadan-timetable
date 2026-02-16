@@ -106,7 +106,6 @@ Implemented in the app:
 
 - Keyboard support for city dropdown (Arrow keys, Home/End, Escape)
 - Focus management for modals (focus on open, trap tab, restore focus on close)
-- Skip link to main content
 - `defer` script loading
 - Reduced motion fallback for users with `prefers-reduced-motion`
 
