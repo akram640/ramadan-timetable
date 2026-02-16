@@ -3,9 +3,13 @@ let cityConfig = [];
 let cityLookupByFile = {};
 let currentDayIndex = -1;
 let countdownInterval = null;
+let quoteInterval = null;
 let selectedCityFile = "";
+let activeModalId = "";
+let lastFocusedElement = null;
 const THEME_STORAGE_KEY = "ramadan_theme";
 const MAIN_CARD_ORNAMENT_PATH = "assets/icons/main-card-bg.png";
+const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 let currentTheme = "light";
 
 document.addEventListener("DOMContentLoaded", initApp);
@@ -18,7 +22,7 @@ async function initApp() {
 
     if (typeof randomQuote === "function") {
         randomQuote();
-        setInterval(randomQuote, 30000);
+        if (!quoteInterval) quoteInterval = setInterval(randomQuote, 30000);
     }
 
     try {
@@ -53,6 +57,8 @@ function wireEvents() {
         const isOpen = document.getElementById("cityDropdown")?.classList.contains("open");
         setCityMenuOpen(!isOpen);
     });
+    cityToggle?.addEventListener("keydown", handleCityToggleKeydown);
+    document.getElementById("cityMenu")?.addEventListener("keydown", handleCityMenuKeydown);
 
     document.querySelectorAll("[data-close-modal]").forEach(button => {
         button.addEventListener("click", closeAllModals);
@@ -71,11 +77,18 @@ function wireEvents() {
     });
 
     document.addEventListener("keydown", event => {
+        trapModalFocus(event);
         if (event.key === "Escape") {
-            closeAllModals();
+            if (activeModalId) {
+                event.preventDefault();
+                closeAllModals();
+                return;
+            }
+
             setCityMenuOpen(false);
         }
     });
+
 }
 
 function initTheme() {
@@ -187,10 +200,116 @@ function applyMainCardOrnament(imagePath) {
 function setCityMenuOpen(open) {
     const dropdown = document.getElementById("cityDropdown");
     const toggle = document.getElementById("cityToggle");
-    if (!dropdown || !toggle) return;
+    const menu = document.getElementById("cityMenu");
+    if (!dropdown || !toggle || !menu) return;
 
     dropdown.classList.toggle("open", open);
     toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    menu.setAttribute("aria-hidden", open ? "false" : "true");
+    setCityOptionTabOrder(open);
+
+    if (!open && menu.contains(document.activeElement)) {
+        toggle.focus();
+    }
+}
+
+function setCityOptionTabOrder(open) {
+    document.querySelectorAll(".city-option").forEach(option => {
+        option.tabIndex = open ? 0 : -1;
+    });
+}
+
+function getCityOptions() {
+    return Array.from(document.querySelectorAll(".city-option"));
+}
+
+function focusCityOption(index) {
+    const options = getCityOptions();
+    if (!options.length) return;
+
+    const safeIndex = ((index % options.length) + options.length) % options.length;
+    options[safeIndex].focus();
+}
+
+function focusSelectedCityOption() {
+    const options = getCityOptions();
+    if (!options.length) return;
+
+    const selectedIndex = options.findIndex(option => option.dataset.file === selectedCityFile);
+    focusCityOption(selectedIndex >= 0 ? selectedIndex : 0);
+}
+
+function handleCityToggleKeydown(event) {
+    const key = event.key;
+
+    if (key === "ArrowDown") {
+        event.preventDefault();
+        setCityMenuOpen(true);
+        focusSelectedCityOption();
+        return;
+    }
+
+    if (key === "ArrowUp") {
+        event.preventDefault();
+        setCityMenuOpen(true);
+        focusCityOption(getCityOptions().length - 1);
+        return;
+    }
+
+    if (key === "Enter" || key === " ") {
+        event.preventDefault();
+        const isOpen = document.getElementById("cityDropdown")?.classList.contains("open");
+        setCityMenuOpen(!isOpen);
+        if (!isOpen) focusSelectedCityOption();
+    }
+}
+
+function handleCityMenuKeydown(event) {
+    const options = getCityOptions();
+    if (!options.length) return;
+
+    const currentIndex = options.indexOf(document.activeElement);
+
+    if (event.key === "ArrowDown") {
+        event.preventDefault();
+        focusCityOption(currentIndex < 0 ? 0 : currentIndex + 1);
+        return;
+    }
+
+    if (event.key === "ArrowUp") {
+        event.preventDefault();
+        focusCityOption(currentIndex < 0 ? options.length - 1 : currentIndex - 1);
+        return;
+    }
+
+    if (event.key === "Home") {
+        event.preventDefault();
+        focusCityOption(0);
+        return;
+    }
+
+    if (event.key === "End") {
+        event.preventDefault();
+        focusCityOption(options.length - 1);
+        return;
+    }
+
+    if (event.key === "Escape") {
+        event.preventDefault();
+        setCityMenuOpen(false);
+    }
+
+    if (event.key === "Tab") {
+        const dropdown = document.getElementById("cityDropdown");
+        const toggle = document.getElementById("cityToggle");
+        const menu = document.getElementById("cityMenu");
+        if (!dropdown || !toggle || !menu) return;
+
+        dropdown.classList.remove("open");
+        toggle.setAttribute("aria-expanded", "false");
+        menu.setAttribute("aria-hidden", "true");
+        setCityOptionTabOrder(false);
+    }
 }
 
 function loadCityConfig() {
@@ -282,6 +401,8 @@ function initCitySelector() {
         item.className = "city-option";
         item.setAttribute("role", "option");
         item.setAttribute("aria-label", city.displayLabel);
+        item.setAttribute("aria-selected", "false");
+        item.tabIndex = -1;
         item.dataset.file = city.file;
 
         const cityName = document.createElement("span");
@@ -303,6 +424,8 @@ function initCitySelector() {
 
         menu.appendChild(item);
     });
+
+    setCityOptionTabOrder(false);
 }
 
 function setSelectedCity(fileName, options = {}) {
@@ -336,6 +459,8 @@ function loadCityData(fileName) {
     applyCityBackground(city.bg);
     document.getElementById("currentCity").innerText = city.city;
     setStatus("Loading timetable...");
+    ramadanData = [];
+    currentDayIndex = -1;
 
     if (countdownInterval) {
         clearInterval(countdownInterval);
@@ -587,7 +712,7 @@ function updateTodayDateDisplay() {
 
 function setStatus(text) {
     const el = document.getElementById("statusText");
-    if (el) el.innerText = text;
+    if (el && el.innerText !== text) el.innerText = text;
 }
 
 function applyCityBackground(imagePath) {
@@ -629,13 +754,74 @@ function tryNextBackground(candidates, index, fallback) {
 function openModal(id) {
     const modal = document.getElementById(id);
     if (!modal) return;
+
+    closeAllModals({ restoreFocus: false });
+    lastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+
     modal.style.display = "block";
+    modal.setAttribute("aria-hidden", "false");
+    activeModalId = id;
     document.body.classList.add("modal-open");
+
+    const focusables = getModalFocusableElements(modal);
+    const firstFocusable = focusables[0] || modal.querySelector(".modal-content");
+    if (firstFocusable instanceof HTMLElement) {
+        if (focusables.length === 0) firstFocusable.setAttribute("tabindex", "-1");
+        firstFocusable.focus();
+    }
 }
 
-function closeAllModals() {
+function closeAllModals(options = {}) {
+    const { restoreFocus = true } = options;
+    const hasOpenModal = Array.from(document.querySelectorAll(".modal")).some(modal => modal.style.display === "block");
+
     document.querySelectorAll(".modal").forEach(modal => {
         modal.style.display = "none";
+        modal.setAttribute("aria-hidden", "true");
     });
+
+    activeModalId = "";
     document.body.classList.remove("modal-open");
+
+    if (restoreFocus && hasOpenModal && lastFocusedElement && document.contains(lastFocusedElement)) {
+        lastFocusedElement.focus();
+    }
+
+    lastFocusedElement = null;
+}
+
+function getModalFocusableElements(modal) {
+    return Array.from(modal.querySelectorAll(FOCUSABLE_SELECTOR)).filter(node => {
+        if (!(node instanceof HTMLElement)) return false;
+        if (node.getAttribute("aria-hidden") === "true") return false;
+        if (node.hasAttribute("disabled")) return false;
+        return true;
+    });
+}
+
+function trapModalFocus(event) {
+    if (event.key !== "Tab" || !activeModalId) return;
+
+    const modal = document.getElementById(activeModalId);
+    if (!modal || modal.style.display !== "block") return;
+
+    const focusables = getModalFocusableElements(modal);
+    if (!focusables.length) {
+        event.preventDefault();
+        return;
+    }
+
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+
+    if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+        return;
+    }
+
+    if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+    }
 }
