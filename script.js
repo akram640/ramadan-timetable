@@ -330,8 +330,28 @@ function loadCityConfig() {
                 throw new Error("citys.csv has no valid rows");
             }
 
-            return cities;
+            return sortCitiesByCountryAndCity(cities);
         });
+}
+
+function sortCitiesByCountryAndCity(cities) {
+    const collator = new Intl.Collator(undefined, { sensitivity: "base" });
+
+    return [...cities].sort((a, b) => {
+        const countryA = String(a.country || "").trim();
+        const countryB = String(b.country || "").trim();
+
+        if (countryA && !countryB) return -1;
+        if (!countryA && countryB) return 1;
+
+        const countryCompare = collator.compare(countryA, countryB);
+        if (countryCompare !== 0) return countryCompare;
+
+        const cityCompare = collator.compare(a.city, b.city);
+        if (cityCompare !== 0) return cityCompare;
+
+        return collator.compare(a.file, b.file);
+    });
 }
 
 function mapCityRow(row, index) {
