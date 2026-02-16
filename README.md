@@ -1,209 +1,159 @@
 # Ramadan Timetable Web App
 
-> This README was completely written by **Codex**.
+A static, city-based Ramadan timetable app with daily Sehri/Iftar times, live countdowns, duas, and motivational quotes.
 
-A lightweight Ramadan timetable web app with city-based Sehri and Iftar times, a live countdown, daily motivation quotes, and dua/timetable modals.
+## Features
 
-## 1. Overview of Project
+- City dropdown powered by `data/citys.csv`
+- Per-city Ramadan timetable from CSV files in `data/`
+- Live countdown to next Sehri/Iftar
+- Daily motivation quotes
+- Dua modal and full timetable modal
+- Light/dark theme toggle
+- City request help modal (`akramfaiz84@gmail.com`)
 
-This project is a static web application built with:
+## Tech Stack
 
-- `index.html`
-- `style.css`
-- `script.js`
-- `quotes.js`
-- CSV data files under `data/`
+- HTML (`index.html`)
+- CSS (`style.css`)
+- JavaScript (`script.js`, `quotes.js`)
+- CSV data files (`data/*.csv`)
 
-The app allows users to:
+## Project Structure
 
-- Select a city
-- View today’s Ramadan day
-- See Sehri and Iftar times
-- Track a live countdown to the next event
-- Read daily motivational quotes
-- Open duas and full timetable screens
-
-## 2. How Project Works
-
-The app runs fully on the client side (browser):
-
-1. On load, `script.js` fetches `data/citys.csv`.
-2. It builds the city dropdown from this file.
-3. When a city is selected, it loads that city’s Ramadan CSV from `data/`.
-4. It renders:
-   - Current Ramadan day
-   - Sehri and Iftar times (12-hour format)
-   - Live countdown timer
-5. It rotates motivation quotes from `quotes.js`.
-6. It stores selected city in browser `localStorage` for next visit.
-
-## 3. How Data Is Stored
-
-### City Registry
-
-File: `data/citys.csv`
-
-Expected columns:
-
-- `city` (city name in dropdown)
-- `country` (country name shown with city)
-- `file` (CSV file name inside `data/`)
-- `bg` (optional custom city background image path)
-
-Example:
-
-```csv
-city,country,file
-Delhi,India,ramadan_delhi.csv
+```text
+.
+├── index.html
+├── style.css
+├── script.js
+├── quotes.js
+├── data/
+│   ├── citys.csv
+│   └── ramadan_<city>.csv
+└── assets/
+    ├── cities/
+    └── icons/
 ```
-
-### Ramadan Timetable Per City
-
-Files: `data/ramadan_<city>.csv`
-
-Expected columns:
-
-- `Day` (1 to 30)
-- `RamadanDate` (usually same as Day, optional for display logic)
-- `Date` (`YYYY-MM-DD`)
-- `Sehri` (`HH:mm`, 24-hour format)
-- `Iftar` (`HH:mm`, 24-hour format)
-
-Example:
-
-```csv
-Day,RamadanDate,Date,Sehri,Iftar
-1,1,2026-02-19,05:25,18:13
-2,2,2026-02-20,05:25,18:14
-```
-
-### Assets
-
-- City backgrounds: `assets/cities/<city>.jpg`
-- App icon: `assets/cities/ramadanIcon.png`
-
-## 4. Process to Add Your City and Create PR
-
-1. Fork this repository.
-2. Create a branch:
-   ```bash
-   git checkout -b add-your-city-name
-   ```
-3. Add a new timetable file in `data/`:
-   - `data/ramadan_<yourcity>.csv`
-4. Add your city entry in `data/citys.csv`:
-   - Add `city`, `country`, and `file` values.
-   - Optional: add `bg` if you want a custom image path.
-5. Add city image to `assets/cities/`:
-   - Recommended file name: `<yourcity>.jpg`
-6. Verify format:
-   - Dates: `YYYY-MM-DD`
-   - Time: 24-hour `HH:mm`
-   - Keep day order correct.
-7. Test locally by running a static server and loading the app.
-8. Commit and push:
-   ```bash
-   git add .
-   git commit -m "Add timetable for <your city>"
-   git push origin add-your-city-name
-   ```
-9. Open a Pull Request with:
-   - City name
-   - Data source used
-   - Any notes for review
-
-## 5. Branch and Deployment Flow
-
-For this project, use this flow:
-
-1. `dev` branch:
-   - Use for coding and testing locally.
-   - Dev (Local): [http://localhost:5500/](http://localhost:5500/)
-   - Note: this URL runs on your machine only and is not a shared deployment link.
-   - `python3 -m http.server 5500`
-2. `main` branch:
-   - Merge `dev` into `main`.
-   - Test the app through deployment (staging validation).
-   - Main (Staging): [https://fascinating-pavlova-aee901.netlify.app](https://fascinating-pavlova-aee901.netlify.app)
-3. `production` branch:
-   - Merge `main` into `production` only after staging is verified.
-   - `production` is the live/public branch and this is the URL everyone uses.
-   - Production (Live): [https://effortless-cheesecake-02e555.netlify.app](https://effortless-cheesecake-02e555.netlify.app)
-   - No direct commits to `production`; only merge verified changes from `main`.
-
-## 6. Contact for Suggestions
-
-For any suggestions, please contact:
-
-**akramfaiz84@gmail.com**
-
-## 7. How to Use the Web App (All 3 Screens)
-
-### Screen 1: Home / Countdown Screen
-
-What you can do:
-
-- Select your city from the dropdown at top
-- View today’s date and Ramadan day
-- Check Sehri and Iftar times
-- Watch live countdown to next Sehri/Iftar
-- Read rotating daily motivation quote
-
-Screenshot:
-
-<a href="./assets/screenshots/home.png">
-  <img src="./assets/screenshots/home.png" alt="Home Screen" width="360" />
-</a>
-
-### Screen 2: Dua Screen
-
-How to open:
-
-- Click the `🤲` button in the top bar.
-
-What it shows:
-
-- Suhoor dua (Arabic + translation)
-- Iftar dua (Arabic + translation)
-
-Screenshot:
-
-<a href="./assets/screenshots/dua.png">
-  <img src="./assets/screenshots/dua.png" alt="Dua Screen" width="360" />
-</a>
-
-### Screen 3: Full Ramadan Timetable Screen
-
-How to open:
-
-- Click the `☰` button in the top bar.
-
-What it shows:
-
-- Full city timetable day-by-day
-- Sehri and Iftar for each day
-- Highlights current day
-
-Screenshot:
-
-<a href="./assets/screenshots/full-timetable.png">
-  <img src="./assets/screenshots/full-timetable.png" alt="Full Timetable Screen" width="360" />
-</a>
 
 ## Run Locally
 
-Because CSV files are loaded with `fetch`, run the project using a local server (not `file://`).
-
-Example:
+Because CSV files are loaded with `fetch`, run via HTTP server (not `file://`).
 
 ```bash
 python3 -m http.server 8080
 ```
 
-Then open:
+Open `http://localhost:8080`.
 
-`http://localhost:8080`
+## Data Format
 
----
+### 1. City Registry (`data/citys.csv`)
 
-If you want, I can also add a short `CONTRIBUTING.md` so PR rules stay separate from the README.
+Required columns:
+
+- `city`
+- `country`
+- `file`
+
+Optional column:
+
+- `bg`
+
+Example:
+
+```csv
+city,country,file,bg
+Wollongong,Australia,ramadan_wollongong.csv,assets/cities/wollongong.jpg
+```
+
+### 2. City Timetable (`data/ramadan_<city>.csv`)
+
+Required columns:
+
+- `Day`
+- `Date` (`YYYY-MM-DD`)
+- `Sehri` (`HH:mm` 24-hour)
+- `Iftar` (`HH:mm` 24-hour)
+
+Example:
+
+```csv
+Day,Date,Sehri,Iftar
+1,2026-02-19,05:05,19:46
+2,2026-02-20,05:04,19:47
+```
+
+## Add a New City
+
+1. Create timetable file: `data/ramadan_<city>.csv`
+2. Add city row to `data/citys.csv`
+3. Optional: add background image in `assets/cities/`
+4. Run locally and verify dropdown + timings
+5. Commit and open PR
+
+### Contributor Checklist
+
+- [ ] CSV dates are `YYYY-MM-DD`
+- [ ] Sehri/Iftar are `HH:mm` (24-hour)
+- [ ] Day sequence is complete and ordered
+- [ ] `file` value in `citys.csv` matches timetable filename
+- [ ] City appears in dropdown
+- [ ] App loads without console errors
+
+## Accessibility and Performance Notes
+
+Implemented in the app:
+
+- Keyboard support for city dropdown (Arrow keys, Home/End, Escape)
+- Focus management for modals (focus on open, trap tab, restore focus on close)
+- Skip link to main content
+- `defer` script loading
+- Reduced motion fallback for users with `prefers-reduced-motion`
+
+## Branch and Deployment Flow
+
+- `dev`: local development and QA
+- `main`: staging validation
+- `production`: public live branch
+
+Current environments:
+
+- Local (dev): `http://localhost:8080`
+- Staging (`main`): `https://fascinating-pavlova-aee901.netlify.app`
+- Live (`production`): `https://effortless-cheesecake-02e555.netlify.app`
+
+## Deployment Checklist
+
+### Pre-merge (Dev -> Main)
+
+- [ ] Pull latest `dev`
+- [ ] Run local smoke test (city switch, modals, countdown, theme toggle)
+- [ ] Confirm no broken assets or missing CSV files
+- [ ] Merge `dev` into `main`
+
+### Staging Validation (Main)
+
+- [ ] Verify staging URL loads
+- [ ] Check at least 3 cities on staging
+- [ ] Check mobile + desktop layout
+- [ ] Check dark/light theme toggle
+- [ ] Check keyboard navigation for dropdown and modals
+
+### Release (Main -> Production)
+
+- [ ] Merge `main` into `production`
+- [ ] Confirm live URL deploy succeeds
+- [ ] Re-check one full user flow on live
+- [ ] Announce release notes (if applicable)
+
+## Basic QA Smoke Test
+
+1. Open app and confirm default city data loads
+2. Change city and verify times + background update
+3. Open and close all modals
+4. Toggle theme and refresh (theme persists)
+5. Leave tab hidden for ~30 seconds, return, confirm countdown remains accurate
+
+## Contact
+
+City requests and suggestions: `akramfaiz84@gmail.com`

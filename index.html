@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="theme-color" content="#eaf0e8" />
+<meta name="description" content="City-based Ramadan 2026 timetable with Sehri and Iftar times, countdown, duas, and daily motivation." />
 <title>Ramadan Timetable</title>
 <link rel="icon" type="image/png" sizes="512x512" href="assets/cities/ramadanIcon.png" />
 <link rel="apple-touch-icon" href="assets/cities/ramadanIcon.png" />
@@ -13,7 +14,8 @@
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<div class="app" role="application" aria-label="Ramadan Timetable App">
+<a class="skip-link" href="#mainContent">Skip to main content</a>
+<div class="app" aria-label="Ramadan Timetable App">
     <button id="themeToggle" class="theme-toggle theme-toggle-floating" type="button" aria-label="Switch to dark theme" aria-pressed="false" title="Switch to dark theme">
         <span id="themeToggleIcon" aria-hidden="true">☾</span>
     </button>
@@ -24,11 +26,11 @@
             <button id="cityHelpBtn" class="city-help-btn" type="button" aria-label="How to request a city" title="City not listed?">i</button>
         </div>
         <div class="city-dropdown" id="cityDropdown">
-            <button id="cityToggle" class="city-toggle" type="button" aria-haspopup="listbox" aria-expanded="false">
+            <button id="cityToggle" class="city-toggle" type="button" aria-haspopup="listbox" aria-controls="cityMenu" aria-expanded="false">
                 <span id="cityToggleText">Select city</span>
                 <span class="city-chevron" aria-hidden="true">▾</span>
             </button>
-            <div id="cityMenu" class="city-menu" role="listbox" aria-label="Cities"></div>
+            <div id="cityMenu" class="city-menu" role="listbox" aria-label="Cities" aria-hidden="true"></div>
             <select id="citySelect" class="visually-hidden" tabindex="-1" aria-hidden="true"></select>
         </div>
     </section>
@@ -39,28 +41,28 @@
         <button id="duaBtn" class="icon-btn" aria-label="Open duas">🤲</button>
     </header>
 
-    <main>
+    <main id="mainContent" tabindex="-1">
         <section class="main-card">
             <p id="todayLabel" class="label">Today</p>
             <p id="currentCity" class="current-city"></p>
             <h2 id="ramadanDay">Loading...</h2>
-            <h3 id="statusText" class="status-text"></h3>
+            <h3 id="statusText" class="status-text" aria-live="polite" aria-atomic="true"></h3>
             <div class="countdown-wrap">
-                <p id="countdown" aria-live="polite">--:--:--</p>
+                <p id="countdown" role="timer" aria-live="off">--:--:--</p>
             </div>
         </section>
 
         <section class="time-card">
             <div class="time-row">
                 <div class="time-meta">
-                    <img class="time-icon" src="assets/icons/sehri-cup.svg" alt="" aria-hidden="true" />
+                    <img class="time-icon" src="assets/icons/sehri-cup.svg" alt="" aria-hidden="true" width="34" height="34" decoding="async" />
                     <span>Sehri</span>
                 </div>
                 <strong id="sehriTime">--</strong>
             </div>
             <div class="time-row">
                 <div class="time-meta">
-                    <img class="time-icon" src="assets/icons/iftar-meal.svg" alt="" aria-hidden="true" />
+                    <img class="time-icon" src="assets/icons/iftar-meal.svg" alt="" aria-hidden="true" width="34" height="34" decoding="async" />
                     <span>Iftar</span>
                 </div>
                 <strong id="iftarTime">--</strong>
@@ -74,7 +76,7 @@
     </main>
 </div>
 
-<div id="duaModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="duaTitle">
+<div id="duaModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="duaTitle" aria-hidden="true">
     <div class="modal-content">
         <h3 id="duaTitle">Suhoor and Iftar Dua</h3>
 
@@ -90,7 +92,7 @@
     </div>
 </div>
 
-<div id="daysModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="daysTitle">
+<div id="daysModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="daysTitle" aria-hidden="true">
     <div class="modal-content list-modal">
         <h3 id="daysTitle">Full Ramadan Timetable</h3>
         <div id="daysList" class="days-list"></div>
@@ -98,7 +100,7 @@
     </div>
 </div>
 
-<div id="cityHelpModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="cityHelpTitle">
+<div id="cityHelpModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="cityHelpTitle" aria-hidden="true">
     <div class="modal-content city-help-modal">
         <h3 id="cityHelpTitle">City not listed?</h3>
         <p class="city-help-text">
@@ -110,7 +112,7 @@
     </div>
 </div>
 
-<script src="quotes.js"></script>
-<script src="script.js"></script>
+<script src="quotes.js" defer></script>
+<script src="script.js" defer></script>
 </body>
 </html>
