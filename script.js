@@ -45,6 +45,7 @@ async function initApp() {
 function wireEvents() {
     document.getElementById("duaBtn")?.addEventListener("click", () => openModal("duaModal"));
     document.getElementById("daysBtn")?.addEventListener("click", () => openModal("daysModal"));
+    document.getElementById("cityHelpBtn")?.addEventListener("click", () => openModal("cityHelpModal"));
     document.getElementById("themeToggle")?.addEventListener("click", toggleTheme);
 
     const cityToggle = document.getElementById("cityToggle");
