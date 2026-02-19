@@ -531,6 +531,9 @@ body.has-main-card-ornament .main-card::before {
         transform 0.62s cubic-bezier(0.22, 1, 0.36, 1),
         max-height 0.62s cubic-bezier(0.22, 1, 0.36, 1),
         margin 0.56s cubic-bezier(0.22, 1, 0.36, 1),
+        font-size 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+        line-height 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+        letter-spacing 0.45s ease,
         color 0.42s ease,
         text-shadow 0.42s ease;
 }
@@ -630,6 +633,113 @@ body.has-main-card-ornament .main-card::before {
     line-height: 1.05;
     font-weight: 800;
     color: #a86a1d;
+}
+
+.main-card.is-iftar-dua-mode {
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+.main-card.is-iftar-dua-mode .status-text {
+    margin: 0;
+    max-width: 100%;
+    font-size: clamp(0.96rem, 2.8vw, 1.18rem);
+    line-height: 1.28;
+    font-weight: 700;
+    color: #5d7267;
+    letter-spacing: 0.015em;
+}
+
+.iftar-dua-moment {
+    width: 100%;
+    margin-top: 0;
+    padding: 0 16px;
+    border-radius: 18px;
+    border: 1px solid transparent;
+    background: linear-gradient(150deg, #fffdf8 0%, #f7f1e4 100%);
+    box-shadow: 0 0 0 rgba(26, 45, 33, 0);
+    text-align: left;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    filter: blur(1.8px);
+    transform: translateY(14px) scale(0.985);
+    transition:
+        opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.58s cubic-bezier(0.22, 1, 0.36, 1),
+        max-height 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+        margin 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        padding 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.35s ease,
+        box-shadow 0.35s ease,
+        filter 0.45s ease;
+}
+
+.iftar-dua-moment.is-visible {
+    margin-top: 12px;
+    padding: 16px 16px 14px;
+    border-color: #e7ddc6;
+    box-shadow: 0 10px 24px rgba(26, 45, 33, 0.14);
+    max-height: 760px;
+    opacity: 1;
+    pointer-events: auto;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+}
+
+.iftar-dua-moment > * {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.iftar-dua-moment.is-visible > * {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.iftar-dua-moment.is-visible > :nth-child(1) { transition-delay: 0.02s; }
+.iftar-dua-moment.is-visible > :nth-child(2) { transition-delay: 0.08s; }
+.iftar-dua-moment.is-visible > :nth-child(3) { transition-delay: 0.13s; }
+.iftar-dua-moment.is-visible > :nth-child(4) { transition-delay: 0.17s; }
+.iftar-dua-moment.is-visible > :nth-child(5) { transition-delay: 0.21s; }
+
+.iftar-dua-moment:not(.is-visible) > * {
+    transition-delay: 0s;
+}
+
+.iftar-dua-kicker {
+    margin: 0;
+    color: #537062;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.main-card .iftar-dua-moment .arabic {
+    margin: 8px 0 8px;
+    font-size: clamp(1.6rem, 6.6vw, 2.2rem);
+}
+
+.main-card .iftar-dua-moment .transliteration {
+    margin: 0 0 10px;
+    color: #5a615d;
+    font-size: clamp(1.04rem, 3.3vw, 1.3rem);
+    line-height: 1.45;
+}
+
+.main-card .iftar-dua-moment .translation {
+    margin: 0;
+    font-size: clamp(1.04rem, 3.3vw, 1.3rem);
+}
+
+.iftar-dua-source {
+    margin: 10px 0 0;
+    color: #6a736e;
+    font-size: 0.94rem;
+    font-weight: 600;
 }
 
 .main-card .label,
@@ -820,6 +930,17 @@ body.has-main-card-ornament .main-card::before {
     letter-spacing: 0.01em;
     direction: rtl;
     text-align: right;
+}
+
+.transliteration {
+    margin: 0 0 14px;
+    font-family: var(--font-ui);
+    color: #5e6a63;
+    font-size: clamp(1.04rem, 3.6vw, 1.4rem);
+    line-height: 1.5;
+    font-style: italic;
+    font-weight: 650;
+    letter-spacing: 0.004em;
 }
 
 .translation {
@@ -1096,6 +1217,32 @@ body[data-theme="dark"] .main-card.is-message-only .status-text {
     text-shadow: 0 10px 24px rgba(8, 3, 0, 0.34);
 }
 
+body[data-theme="dark"] .main-card.is-iftar-dua-mode .status-text {
+    color: #d8e7fc;
+    text-shadow: none;
+}
+
+body[data-theme="dark"] .iftar-dua-moment {
+    background: linear-gradient(160deg, #1c4772f0 0%, #14395ff0 100%);
+}
+
+body[data-theme="dark"] .iftar-dua-moment.is-visible {
+    border-color: rgba(154, 188, 232, 0.36);
+    box-shadow: 0 10px 26px rgba(0, 10, 28, 0.38);
+}
+
+body[data-theme="dark"] .iftar-dua-kicker {
+    color: #cfe0f7;
+}
+
+body[data-theme="dark"] .main-card .iftar-dua-moment .transliteration {
+    color: #c8dcf7;
+}
+
+body[data-theme="dark"] .iftar-dua-source {
+    color: #b8cee9;
+}
+
 body[data-theme="dark"].has-main-card-focus .app::after {
     background: radial-gradient(circle at 50% 42%, rgba(1, 10, 24, 0.22) 0%, rgba(1, 8, 20, 0.52) 74%);
 }
@@ -1160,6 +1307,10 @@ body[data-theme="dark"] .arabic {
 
 body[data-theme="dark"] .translation {
     color: #c9dcf8;
+}
+
+body[data-theme="dark"] .transliteration {
+    color: #d2e2f8;
 }
 
 body[data-theme="dark"] .city-help-text {
@@ -1291,6 +1442,10 @@ body[data-theme="dark"] .day-label {
 
     .translation {
         margin-bottom: 14px;
+    }
+
+    .transliteration {
+        margin-bottom: 12px;
     }
 }
 
