@@ -692,20 +692,19 @@ function renderEventCountdown(moment) {
     if (!countdown) return;
 
     const isPostEventWindow = moment.phase === "after";
+    const duaType = isPostEventWindow ? moment.eventType : "";
 
     if (moment.eventType === "iftar") {
         setStatus(moment.phase === "before" ? "Iftar starts in" : "It's Iftar time");
     } else {
-        setStatus(moment.phase === "before" ? "Sehri ends in" : "Sehri time is over");
+        setStatus(moment.phase === "before" ? "Suhoor ends in" : "Suhoor is over");
     }
 
-    if (isPostEventWindow) {
-        countdown.innerText = "";
-    } else {
+    if (!isPostEventWindow) {
         countdown.innerText = formatSecondsCountdown(moment.secondsRemaining);
     }
 
-    setMainCardEventMode(true, { messageOnly: isPostEventWindow });
+    setMainCardEventMode(true, { messageOnly: isPostEventWindow, duaType });
 }
 
 function buildDaysList() {
@@ -816,19 +815,35 @@ function setStatus(text) {
 }
 
 function setMainCardEventMode(active, options = {}) {
-    const { messageOnly = false } = options;
+    const { messageOnly = false, duaType = "" } = options;
     const mainCard = document.querySelector(".main-card");
     if (!mainCard) return;
     const body = document.body;
 
     const isActive = Boolean(active);
     const isMessageOnly = isActive && Boolean(messageOnly);
+    const showIftarDua = isActive && duaType === "iftar";
+    const showSuhoorDua = isActive && duaType === "sehri";
+    const isIftarDuaMode = showIftarDua || showSuhoorDua;
     mainCard.classList.toggle("is-moment-mode", isActive);
     mainCard.classList.toggle("is-message-only", isMessageOnly);
+    mainCard.classList.toggle("is-iftar-dua-mode", isIftarDuaMode);
     if (body) body.classList.toggle("has-main-card-focus", isActive);
 
     const countdown = document.getElementById("countdown");
-    if (countdown) countdown.setAttribute("aria-hidden", isMessageOnly ? "true" : "false");
+    if (countdown) countdown.setAttribute("aria-hidden", isMessageOnly || isIftarDuaMode ? "true" : "false");
+
+    const iftarDua = document.getElementById("iftarDuaMoment");
+    if (iftarDua) {
+        iftarDua.classList.toggle("is-visible", showIftarDua);
+        iftarDua.setAttribute("aria-hidden", showIftarDua ? "false" : "true");
+    }
+
+    const suhoorDua = document.getElementById("suhoorDuaMoment");
+    if (suhoorDua) {
+        suhoorDua.classList.toggle("is-visible", showSuhoorDua);
+        suhoorDua.setAttribute("aria-hidden", showSuhoorDua ? "false" : "true");
+    }
 }
 
 function applyCityBackground(imagePath) {
