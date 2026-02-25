@@ -883,6 +883,12 @@ body.has-main-card-ornament .main-card::before {
     padding: 16px;
     background: linear-gradient(180deg, #0000008f, #000000ad);
     backdrop-filter: blur(3px);
+    opacity: 0;
+    transition: opacity 320ms ease;
+}
+
+.modal.is-open {
+    opacity: 1;
 }
 
 .modal-content {
@@ -895,6 +901,20 @@ body.has-main-card-ornament .main-card::before {
     border: 1px solid var(--line);
     background: #fffdfa;
     box-shadow: var(--shadow-lg);
+    transform: translateY(18px) scale(0.986);
+    opacity: 0;
+    transition:
+        transform 420ms cubic-bezier(0.2, 0.85, 0.2, 1),
+        opacity 320ms ease,
+        background 0.35s ease,
+        border-color 0.35s ease,
+        color 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+.modal.is-open .modal-content {
+    transform: translateY(0) scale(1);
+    opacity: 1;
 }
 
 .modal-content h3,

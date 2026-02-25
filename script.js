@@ -7,12 +7,14 @@ let quoteInterval = null;
 let selectedCityFile = "";
 let activeModalId = "";
 let lastFocusedElement = null;
+let daysModalScrollTimer = null;
 const THEME_STORAGE_KEY = "ramadan_theme";
 const MAIN_CARD_ORNAMENT_PATH = "assets/icons/main-card-bg.png";
 const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 const EVENT_PRE_WINDOW_SECONDS = 59;
 const EVENT_POST_WINDOW_SECONDS = 59;
 const EVENT_POST_WINDOW_DURATION_MS = (EVENT_POST_WINDOW_SECONDS + 1) * 1000;
+const DAYS_MODAL_SCROLL_DELAY_MS = 160;
 let currentTheme = "light";
 
 document.addEventListener("DOMContentLoaded", initApp);
@@ -737,6 +739,10 @@ function buildDaysList() {
         item.appendChild(timing);
         container.appendChild(item);
     });
+
+    if (activeModalId === "daysModal") {
+        scrollDaysListToCurrent({ behavior: "auto" });
+    }
 }
 
 function formatListDate(dateStr) {
@@ -891,6 +897,10 @@ function openModal(id) {
 
     modal.style.display = "block";
     modal.setAttribute("aria-hidden", "false");
+    modal.classList.remove("is-open");
+    requestAnimationFrame(() => {
+        if (modal.style.display === "block") modal.classList.add("is-open");
+    });
     activeModalId = id;
     document.body.classList.add("modal-open");
 
@@ -900,13 +910,21 @@ function openModal(id) {
         if (focusables.length === 0) firstFocusable.setAttribute("tabindex", "-1");
         firstFocusable.focus();
     }
+
+    if (id === "daysModal") scheduleDaysListAutoScroll();
 }
 
 function closeAllModals(options = {}) {
     const { restoreFocus = true } = options;
     const hasOpenModal = Array.from(document.querySelectorAll(".modal")).some(modal => modal.style.display === "block");
 
+    if (daysModalScrollTimer) {
+        clearTimeout(daysModalScrollTimer);
+        daysModalScrollTimer = null;
+    }
+
     document.querySelectorAll(".modal").forEach(modal => {
+        modal.classList.remove("is-open");
         modal.style.display = "none";
         modal.setAttribute("aria-hidden", "true");
     });
@@ -928,6 +946,45 @@ function getModalFocusableElements(modal) {
         if (node.hasAttribute("disabled")) return false;
         return true;
     });
+}
+
+function scheduleDaysListAutoScroll() {
+    if (daysModalScrollTimer) {
+        clearTimeout(daysModalScrollTimer);
+        daysModalScrollTimer = null;
+    }
+
+    const smoothScroll = !prefersReducedMotion();
+    const behavior = smoothScroll ? "smooth" : "auto";
+    const delay = smoothScroll ? DAYS_MODAL_SCROLL_DELAY_MS : 0;
+
+    daysModalScrollTimer = setTimeout(() => {
+        scrollDaysListToCurrent({ behavior });
+        daysModalScrollTimer = null;
+    }, delay);
+}
+
+function scrollDaysListToCurrent(options = {}) {
+    const { behavior = "auto" } = options;
+    const list = document.getElementById("daysList");
+    if (!list) return;
+
+    const currentItem = list.querySelector(".day-item.current");
+    if (!(currentItem instanceof HTMLElement)) return;
+
+    const maxScrollTop = Math.max(0, list.scrollHeight - list.clientHeight);
+    const centeredTop = currentItem.offsetTop - (list.clientHeight - currentItem.offsetHeight) / 2;
+    const targetTop = Math.min(maxScrollTop, Math.max(0, centeredTop));
+
+    list.scrollTo({ top: targetTop, behavior });
+}
+
+function prefersReducedMotion() {
+    try {
+        return Boolean(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    } catch {
+        return false;
+    }
 }
 
 function trapModalFocus(event) {
