@@ -994,6 +994,77 @@ body.has-main-card-ornament .main-card::before {
     color: #235840;
 }
 
+.days-progress {
+    margin: 2px 0 10px;
+    display: grid;
+    gap: 4px;
+}
+
+.days-progress-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.days-progress-title {
+    margin: 0;
+    color: #2f6f59;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+.days-progress-value {
+    margin: 0;
+    color: #245745;
+    font-family: var(--font-time);
+    font-size: 1.14rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.days-progress-track {
+    position: relative;
+    height: 14px;
+    border-radius: 999px;
+    border: 1px solid #4c7c6d73;
+    background: linear-gradient(90deg, #2a5148e6 0%, #3b6d62de 52%, #274c43e6 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.14),
+        inset 0 -1px 0 rgba(8, 26, 21, 0.46);
+    overflow: hidden;
+}
+
+.days-progress-fill {
+    position: relative;
+    display: block;
+    width: 0%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #1f7a5d 0%, #33a17a 48%, #63c7a5 100%);
+    box-shadow:
+        0 0 14px rgba(61, 160, 124, 0.68),
+        inset 0 0 0 1px rgba(194, 242, 225, 0.5);
+    transition: width 900ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.days-progress-fill::after {
+    content: "";
+    position: absolute;
+    right: -18px;
+    top: -18px;
+    width: 40px;
+    height: 50px;
+    background: radial-gradient(circle, rgba(205, 244, 231, 0.72) 0%, rgba(205, 244, 231, 0) 66%);
+    pointer-events: none;
+}
+
+.days-progress.is-empty .days-progress-fill {
+    box-shadow: none;
+}
+
 .days-list {
     display: grid;
     gap: 8px;
@@ -1343,6 +1414,33 @@ body[data-theme="dark"] .city-help-text a {
 
 body[data-theme="dark"] .city-help-text a:hover {
     color: #ffd990;
+}
+
+body[data-theme="dark"] .days-progress {
+    gap: 4px;
+}
+
+body[data-theme="dark"] .days-progress-title {
+    color: #efd8a2;
+}
+
+body[data-theme="dark"] .days-progress-value {
+    color: #f7ebcb;
+}
+
+body[data-theme="dark"] .days-progress-track {
+    border-color: rgba(134, 177, 234, 0.52);
+    background: linear-gradient(90deg, #1f3d64f2 0%, #2f5787eb 52%, #1d3861f2 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(223, 241, 255, 0.16),
+        inset 0 -1px 0 rgba(1, 9, 22, 0.58);
+}
+
+body[data-theme="dark"] .days-progress-fill {
+    background: linear-gradient(90deg, #2d83ff 0%, #4ba1ff 48%, #79c4ff 100%);
+    box-shadow:
+        0 0 18px rgba(88, 172, 255, 0.72),
+        inset 0 0 0 1px rgba(201, 233, 255, 0.44);
 }
 
 body[data-theme="dark"] .day-item {

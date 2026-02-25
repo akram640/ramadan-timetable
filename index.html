@@ -107,6 +107,23 @@
 <div id="daysModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="daysTitle" aria-hidden="true">
     <div class="modal-content list-modal">
         <h3 id="daysTitle">Full Ramadan Timetable</h3>
+        <section id="daysProgress" class="days-progress" aria-label="Ramadan fasting progress">
+            <div class="days-progress-top">
+                <p class="days-progress-title">Fasting Days Over</p>
+                <p id="daysProgressValue" class="days-progress-value">0 / 0</p>
+            </div>
+            <div
+                id="daysProgressTrack"
+                class="days-progress-track"
+                role="progressbar"
+                aria-label="Ramadan fasting days completed"
+                aria-valuemin="0"
+                aria-valuemax="0"
+                aria-valuenow="0"
+            >
+                <span id="daysProgressFill" class="days-progress-fill"></span>
+            </div>
+        </section>
         <div id="daysList" class="days-list"></div>
         <button class="close-btn" type="button" data-close-modal>Close</button>
     </div>

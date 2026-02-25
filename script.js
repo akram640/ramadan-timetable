@@ -714,6 +714,7 @@ function buildDaysList() {
     if (!container) return;
 
     container.innerHTML = "";
+    updateDaysProgress();
 
     if (!ramadanData.length) {
         const empty = document.createElement("div");
@@ -743,6 +744,84 @@ function buildDaysList() {
     if (activeModalId === "daysModal") {
         scrollDaysListToCurrent({ behavior: "auto" });
     }
+}
+
+function updateDaysProgress() {
+    const progress = document.getElementById("daysProgress");
+    const value = document.getElementById("daysProgressValue");
+    const fill = document.getElementById("daysProgressFill");
+    const track = document.getElementById("daysProgressTrack");
+
+    if (!progress || !value || !fill || !track) return;
+
+    if (!ramadanData.length) {
+        progress.classList.add("is-empty");
+        value.innerText = "0 / 0";
+        fill.style.width = "0%";
+        track.setAttribute("aria-valuemin", "0");
+        track.setAttribute("aria-valuemax", "0");
+        track.setAttribute("aria-valuenow", "0");
+        track.setAttribute("aria-valuetext", "0 of 0 fasting days completed");
+        return;
+    }
+
+    const summary = getFastingProgressSummary();
+    progress.classList.remove("is-empty");
+    value.innerText = `${summary.completedDays} / ${summary.totalDays}`;
+    fill.style.width = `${summary.percentComplete}%`;
+    track.setAttribute("aria-valuemin", "0");
+    track.setAttribute("aria-valuemax", String(summary.totalDays));
+    track.setAttribute("aria-valuenow", String(summary.completedDays));
+    track.setAttribute("aria-valuetext", `${summary.completedDays} of ${summary.totalDays} fasting days completed`);
+}
+
+function getFastingProgressSummary() {
+    const totalDays = ramadanData.length;
+    if (!totalDays) {
+        return {
+            totalDays: 0,
+            completedDays: 0,
+            percentComplete: 0
+        };
+    }
+
+    const today = getTodayDateString();
+    const now = new Date();
+    const firstDate = ramadanData[0].Date;
+    const lastDate = ramadanData[totalDays - 1].Date;
+    let completedDays = 0;
+
+    if (today < firstDate) {
+        completedDays = 0;
+    } else if (today > lastDate) {
+        completedDays = totalDays;
+    } else {
+        const todayIndex = ramadanData.findIndex(day => day.Date === today);
+        if (todayIndex >= 0) {
+            completedDays = todayIndex;
+            const todayEntry = ramadanData[todayIndex];
+            const todayIftar = toDateTime(todayEntry.Date, todayEntry.Iftar);
+            if (!Number.isNaN(todayIftar.getTime()) && now >= todayIftar) {
+                completedDays = todayIndex + 1;
+            }
+        } else {
+            const upcomingDayIndex = ramadanData.findIndex(day => day.Date > today);
+            if (upcomingDayIndex >= 0) {
+                completedDays = upcomingDayIndex;
+            } else {
+                completedDays = totalDays;
+            }
+        }
+    }
+
+    const safeCompletedDays = Math.min(totalDays, Math.max(0, completedDays));
+    const percentComplete = totalDays > 0 ? (safeCompletedDays / totalDays) * 100 : 0;
+
+    return {
+        totalDays,
+        completedDays: safeCompletedDays,
+        percentComplete
+    };
 }
 
 function formatListDate(dateStr) {
