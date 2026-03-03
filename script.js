@@ -624,6 +624,11 @@ function runCountdown() {
     const day = ramadanData[currentDayIndex];
     if (!day) return;
 
+    if (activeModalId === "daysModal") {
+        updateDaysProgress();
+        updateCurrentDayRowProgress();
+    }
+
     const sehriCurrent = toDateTime(day.Date, day.Sehri);
     const iftarCurrent = toDateTime(day.Date, day.Iftar);
     const sehriMoment = getEventMomentState(now, sehriCurrent, "sehri");
@@ -715,6 +720,8 @@ function buildDaysList() {
 
     container.innerHTML = "";
     updateDaysProgress();
+    const today = getTodayDateString();
+    const now = new Date();
 
     if (!ramadanData.length) {
         const empty = document.createElement("div");
@@ -727,19 +734,36 @@ function buildDaysList() {
     ramadanData.forEach((day, index) => {
         const item = document.createElement("div");
         item.className = "day-item";
-        if (index === currentDayIndex) item.classList.add("current");
+        item.dataset.dayIndex = String(index);
+
+        const isCurrentDay = index === currentDayIndex;
+        if (isCurrentDay) item.classList.add("current");
+
+        const fastingDayProgress = isCurrentDay ? getCurrentDayFastingProgressPercent(day, now, today) : null;
+        if (fastingDayProgress !== null) {
+            item.classList.add("has-fast-progress");
+            item.style.setProperty("--day-fast-progress", `${fastingDayProgress.toFixed(3)}%`);
+
+            const progressFill = document.createElement("span");
+            progressFill.className = "day-item-progress-fill";
+            progressFill.setAttribute("aria-hidden", "true");
+            item.appendChild(progressFill);
+        }
 
         const dayLabel = document.createElement("span");
         dayLabel.className = "day-label";
         dayLabel.innerText = `Day ${day.Day}`;
 
         const timing = document.createElement("span");
+        timing.className = "day-timing";
         timing.innerText = `${formatListDate(day.Date)} | Sehri: ${formatToAmPm(day.Sehri)} | Iftar: ${formatToAmPm(day.Iftar)}`;
 
         item.appendChild(dayLabel);
         item.appendChild(timing);
         container.appendChild(item);
     });
+
+    updateCurrentDayRowProgress();
 
     if (activeModalId === "daysModal") {
         scrollDaysListToCurrent({ behavior: "auto" });
@@ -773,6 +797,35 @@ function updateDaysProgress() {
     track.setAttribute("aria-valuemax", String(summary.totalDays));
     track.setAttribute("aria-valuenow", String(summary.completedDays));
     track.setAttribute("aria-valuetext", `${summary.completedDays} of ${summary.totalDays} fasting days completed`);
+}
+
+function updateCurrentDayRowProgress() {
+    const list = document.getElementById("daysList");
+    if (!list) return;
+
+    const currentItem = list.querySelector(".day-item.current");
+    if (!(currentItem instanceof HTMLElement)) return;
+
+    const dayIndex = Number(currentItem.dataset.dayIndex);
+    if (!Number.isInteger(dayIndex) || dayIndex < 0 || dayIndex >= ramadanData.length) return;
+
+    const progressPercent = getCurrentDayFastingProgressPercent(ramadanData[dayIndex]);
+    if (progressPercent === null) {
+        currentItem.classList.remove("has-fast-progress");
+        currentItem.style.setProperty("--day-fast-progress", "0%");
+        return;
+    }
+
+    let progressFill = currentItem.querySelector(".day-item-progress-fill");
+    if (!(progressFill instanceof HTMLElement)) {
+        progressFill = document.createElement("span");
+        progressFill.className = "day-item-progress-fill";
+        progressFill.setAttribute("aria-hidden", "true");
+        currentItem.prepend(progressFill);
+    }
+
+    currentItem.classList.add("has-fast-progress");
+    currentItem.style.setProperty("--day-fast-progress", `${progressPercent.toFixed(3)}%`);
 }
 
 function getFastingProgressSummary() {
@@ -822,6 +875,26 @@ function getFastingProgressSummary() {
         completedDays: safeCompletedDays,
         percentComplete
     };
+}
+
+function getCurrentDayFastingProgressPercent(day, now = new Date(), todayDate = getTodayDateString()) {
+    if (!day || day.Date !== todayDate) return null;
+
+    const sehriTime = toDateTime(day.Date, day.Sehri);
+    const iftarTime = toDateTime(day.Date, day.Iftar);
+    const sehriMs = sehriTime.getTime();
+    const iftarMs = iftarTime.getTime();
+
+    if (Number.isNaN(sehriMs) || Number.isNaN(iftarMs) || iftarMs <= sehriMs) {
+        return null;
+    }
+
+    const nowMs = now.getTime();
+    if (nowMs <= sehriMs) return 0;
+    if (nowMs >= iftarMs) return 100;
+
+    const progress = ((nowMs - sehriMs) / (iftarMs - sehriMs)) * 100;
+    return Math.min(100, Math.max(0, progress));
 }
 
 function formatListDate(dateStr) {
@@ -990,7 +1063,11 @@ function openModal(id) {
         firstFocusable.focus();
     }
 
-    if (id === "daysModal") scheduleDaysListAutoScroll();
+    if (id === "daysModal") {
+        updateDaysProgress();
+        updateCurrentDayRowProgress();
+        scheduleDaysListAutoScroll();
+    }
 }
 
 function closeAllModals(options = {}) {
